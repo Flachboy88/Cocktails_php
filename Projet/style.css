@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    padding: 15px 25px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #e85f41;
+    text-decoration: none;
+}
+
+.user-btn {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #eee;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 0;
+}
+
+
+.user-btn:hover {
+    background: #ddd;
+}
+
+.user-menu {
+    position: relative;
+}
+
+.user-choix_menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
+    min-width: 180px;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.user-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.user-choix_menu.show {
+    display: flex;
+}
+
+.user-choix_menu a,
+.user-choix_menu .hello {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    color: #333;
+    transition: 0.2s;
+}
+
+.user-choix_menu a:hover {
+    background: #f4f4f4;
+}
+
+.user-choix_menu .logout {
+    color: #d9534f;
+}
+
+/* --- Page d'inscription --- */
+
+.form-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fafafa;
+    padding: 30px;
+}
+
+.form-card {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.10);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.title {
+    text-align: center;
+    color: #e85f41;
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.section-title {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #444;
+    font-weight: bold;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input {
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1.5px solid #ccc;
+    background: white;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #e85f41;
+    background: #fff6f4;
+    box-shadow: 0 0 0 3px rgba(232, 95, 65, 0.15);
+}
+
+.label {
+    margin-top: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 14px;
+    background: #e85f41;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: #cf5339;
+}
+
+.error {
+    background: #ffe3e3;
+    padding: 10px 15px;
+    color: #b92c2c;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.btn-return {
+    display: block;
+    margin: 20px auto; 
+    padding: 14px 20px;
+    background: #e85f41;          
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+    color : white;
+}
+
+.btn-return:hover {
+    background: #cf5339;
+}
+
+.btn-return {
+    display: block;
+    margin: 20px auto; 
+    width: fit-content; 
+}
