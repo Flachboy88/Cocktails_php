@@ -2,7 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
+if (!isset($_SESSION['Aliment'])){
+    $_SESSION['Aliment'] = 'Aliment';
+}
+if (!isset($_SESSION['ArbreDeRecherche'])){
+    $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
+}
 include 'Donnees.inc.php';
 
 if (isset($_GET['Aliment'])) {
@@ -25,7 +30,6 @@ if (isset($_GET['Aliment'])) {
         $_SESSION['ArbreDeRecherche'][$i] = $_GET['Aliment'];
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +43,9 @@ if (isset($_GET['Aliment'])) {
 <h1>Rubrique</h1>
 
 <?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
-    <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>"><?= htmlspecialchars($recherche) ?> / </a>
+    <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>">
+        <?= htmlspecialchars($recherche) ?> /
+    </a>
 <?php endforeach; ?>
 
 <br><br>
@@ -49,14 +55,14 @@ if (isset($_GET['Aliment'])) {
 
     foreach ($Hierarchie as $key => $categorie) :
         if ($key == $alimentActuel) :
-            if (isset($categorie['sous-categorie'])):
+            if (isset($categorie['sous-categorie'])) :
                 foreach ($categorie['sous-categorie'] as $value) :
 ?>
-                    <li>
-                        <a href="pagePrincipale.php?Aliment=<?= urlencode($value) ?>">
-                            <?= htmlspecialchars($value) ?>
-                        </a>
-                    </li>
+                <li>
+                    <a href="pagePrincipale.php?Aliment=<?= urlencode($value) ?>">
+                        <?= htmlspecialchars($value) ?>
+                    </a>
+                </li>
 <?php
             endforeach;
 

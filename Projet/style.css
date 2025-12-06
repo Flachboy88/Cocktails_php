@@ -182,28 +182,10 @@
     font-weight: bold;
 }
 
-.btn-return {
-    display: block;
-    margin: 20px auto; 
-    padding: 14px 20px;
-    background: #e85f41;          
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.2s;
-    color : white;
-}
 
-.btn-return:hover {
-    background: #cf5339;
-}
 
-.btn-return {
-    display: block;
-    margin: 20px auto; 
-    width: fit-content; 
+/* --- Page principal --- */
+.boisson {
+	text-decoration: none; 
+	color: black;
 }
