@@ -17,6 +17,34 @@ if (isset($_GET['boissonSpecifique'])) {
 
 $index = $_SESSION['boissonSpecifique'];
 $boisson = $Recettes[$index];
+
+$isFavorite = false;
+$actionUrl = 'favoris_action.php?id=' . urlencode($index);
+
+if (isset($_SESSION['user'])) {
+    $userId = $_SESSION['user']['id'];
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM recettes_favorites WHERE utilisateur_id = ? AND recette_id = ?");
+    $stmt->execute([$userId, $index]);
+    $count = $stmt->fetchColumn();
+    
+    if ($count > 0) {
+        $isFavorite = true;
+        $actionUrl .= '&action=remove';
+    } else {
+        $actionUrl .= '&action=add';
+    }
+} else {
+    // visiteur
+    if (!isset($_SESSION['guest_favorites'])) {
+        $_SESSION['guest_favorites'] = [];
+    }
+    if (in_array($index, $_SESSION['guest_favorites'])) {
+        $isFavorite = true;
+        $actionUrl .= '&action=remove';
+    } else {
+        $actionUrl .= '&action=add';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,9 +61,11 @@ $boisson = $Recettes[$index];
         <a href="pagePrincipale.php" class="btn-action btn-back">
             < Retour
         </a>
-        <a href="#" class="btn-action btn-favorite">
-            ☆ Ajouter aux Favoris
+        
+        <a href="<?= $actionUrl ?>" class="btn-action btn-favorite">
+            <?= $isFavorite ? '★ Retirer des Favoris' : '☆ Ajouter aux Favoris' ?>
         </a>
+        
     </div>
 
     <div class="cocktail-card">
