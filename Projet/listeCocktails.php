@@ -2,13 +2,17 @@
 if (session_status() === PHP_SESSION_NONE) { //initialisation
     session_start();
 }
+
+include 'Donnees.inc.php'; 
+
+// ... (Logique de session et de filtrage inchangée) ...
 if (!isset($_SESSION['Aliment'])){
     $_SESSION['Aliment'] = 'Aliment';
 }
-if (!isset($_SESSION['ArbreDeRecherche'])){
+if (!isset($_SESSION['ArbreDeRecherche'])) {
     $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
 }
-if (!isset($_SESSION['boissonSpecifique'])){
+if (!isset($_SESSION['boissonSpecifique'])) {
     $_SESSION['boissonSpecifique'] = 0;
 }
 
@@ -47,8 +51,10 @@ function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles a
 <body>
 
 <main>
-    <p>
+    <h1>Cocktails disponibles</h1>
+    <ul>
     <?php 
+
         if ($_SESSION['Aliment'] == 'Aliment'){
             foreach ($Recettes as $r => $nomboisson):?>
                 <li>

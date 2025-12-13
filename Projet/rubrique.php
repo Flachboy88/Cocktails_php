@@ -11,6 +11,7 @@ if (!isset($_SESSION['ArbreDeRecherche'])){
 include 'Donnees.inc.php';
 
 if (isset($_GET['Aliment'])) {
+
     $_SESSION['Aliment'] = $_GET['Aliment'];
 
     $nouv = true;
@@ -30,7 +31,9 @@ if (isset($_GET['Aliment'])) {
         $_SESSION['ArbreDeRecherche'][$i] = $_GET['Aliment'];
     }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,19 +43,25 @@ if (isset($_GET['Aliment'])) {
 </head>
 
 <body>
-<h1>Rubrique</h1>
+<h1>Catégories</h1>
 
-<?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
-    <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>">
-        <?= htmlspecialchars($recherche) ?> /
-    </a>
-<?php endforeach; ?>
+<div class="arbre-recherche">
+    <?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
+        <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>">
+            <?= htmlspecialchars($recherche) ?>
+        </a>
+        <span> / </span>
+    <?php endforeach; ?>
+</div>
 
-<br><br>
+<br>
 
 <?php
     $alimentActuel = $_SESSION['Aliment'];
+?>
 
+<ul>
+<?php
     foreach ($Hierarchie as $key => $categorie) :
         if ($key == $alimentActuel) :
             if (isset($categorie['sous-categorie'])) :
@@ -65,14 +74,14 @@ if (isset($_GET['Aliment'])) {
                 </li>
 <?php
             endforeach;
-
-        else :
-            echo "<p>Aucune sous-catégorie disponible.</p>";
         endif;
 
     endif;
 
 endforeach;
 ?>
+</ul>
+
+
 </body>
 </html>

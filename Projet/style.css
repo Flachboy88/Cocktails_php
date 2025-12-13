@@ -5,12 +5,17 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+body {
+    background-color: #c0bf94;
+    /* #8f919b  autre qui est pas trop moche, à changer si jamais*/
+}
+
 .header {
     width: 100%;
     background: #ffffff;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     padding: 15px 25px;
-    
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -56,7 +61,7 @@
 
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
     min-width: 180px;
     overflow: hidden;
@@ -97,7 +102,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #fafafa;
+    background: #fcfcfc;
     padding: 30px;
 }
 
@@ -182,10 +187,226 @@
     font-weight: bold;
 }
 
-
-
 /* --- Page principal --- */
 .boisson {
-	text-decoration: none; 
-	color: black;
+    text-decoration: none;
+    color: black;
+}
+
+.main-content-layout {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+}
+
+.rubriques-colonne {
+    flex: 0 0 30%;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    overflow-y: auto;
+    min-height: 500px;
+}
+
+.cocktails-colonne {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.cocktails-colonne main p {
+    margin: 0;
+}
+
+.cocktails-colonne ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cocktails-colonne li {
+    margin-bottom: 8px;
+}
+
+.rubriques-colonne h1 {
+    font-size: 1.5em;
+    color: #444;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e85f41;
+    padding-bottom: 5px;
+}
+
+.rubriques-colonne .arbre-recherche a {
+    color: #e85f41;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.rubriques-colonne .arbre-recherche a:hover {
+    text-decoration: underline;
+}
+
+.rubriques-colonne ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.rubriques-colonne li a {
+    display: block;
+    padding: 8px 10px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: #333;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.rubriques-colonne li a:hover {
+    background-color: #fff6f4;
+    border-left: 4px solid #e85f41;
+    color: #e85f41;
+}
+
+.cocktails-list-item {
+    display: block;
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cocktails-list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cocktails-list-item a.boisson {
+    display: block;
+    font-size: 1.1em;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-home {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #444;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-home:hover {
+    background: #333;
+}
+
+
+/* --- Page Détail Cocktail (boissonSpecifique.php) --- */
+
+.cocktail-detail-page {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.cocktail-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.btn-action {
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back {
+    background: #4a4e69;
+    color: white;
+}
+
+.btn-back:hover {
+    background: #3c4059;
+}
+
+.btn-favorite {
+    background: #e85f41;
+    color: white;
+}
+
+.btn-favorite:hover {
+    background: #cf5339;
+}
+
+.cocktail-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+}
+
+.cocktail-title {
+    font-size: 2.2em;
+    color: #e85f41;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.cocktail-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-left: 5px solid #e85f41;
+    background-color: #fcfcfc;
+    border-radius: 5px;
+}
+
+.section-subtitle {
+    font-size: 1.5em;
+    color: #4a4e69;
+    margin-bottom: 15px;
+}
+
+.ingredients-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.ingredients-list li {
+    padding: 5px 0 5px 25px;
+    position: relative;
+    font-size: 1.1em;
+    color: #333;
+    border-bottom: 1px dashed #eee;
+}
+
+.ingredients-list li:last-child {
+    border-bottom: none;
+}
+
+.ingredients-list li::before {
+    content: "•";
+    color: #e85f41;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+}
+
+.preparation-text {
+    line-height: 1.6;
+    color: #333;
 }

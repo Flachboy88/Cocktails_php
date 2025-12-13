@@ -45,13 +45,14 @@ try {
             <img src="connexion.png" alt="Connexion" class="user-icon">
         </button>
 
-
         <div class="user-choix_menu" id="scroll">
             <?php if (!isset($_SESSION['user'])): ?>
                 <a href="connexion.php">Connexion</a>
                 <a href="inscription.php">Inscription</a>
+                <a href="favoris.php">Mes Favoris</a>
             <?php else: ?>
                 <span class="hello">Bonjour <?= htmlspecialchars($_SESSION['user']['login']) ?></span>
+                <a href="favoris.php">Mes Favoris</a>
                 <a href="info_perso.php">Modifier mes infos</a>
                 <a href="deconnexion.php" class="logout">Déconnexion</a>
             <?php endif; ?>

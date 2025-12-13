@@ -27,6 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user) {
         if ($user['motdepasse'] === $mdp) {
             $_SESSION['user'] = $user;
+            
+            if (isset($_SESSION['guest_favorites']) && !empty($_SESSION['guest_favorites'])) {
+                $userId = $user['id'];
+                
+                foreach ($_SESSION['guest_favorites'] as $recetteId) {
+                    try {
+                        $stmt = $pdo->prepare("INSERT INTO recettes_favorites (utilisateur_id, recette_id) VALUES (?, ?)");
+                        $stmt->execute([$userId, $recetteId]);
+                    } catch (Exception $e) {
+                        
+                    }
+                }
+                
+                // supp les favoris visiteurs 
+                unset($_SESSION['guest_favorites']);
+            }
+            
             header("Location: pagePrincipale.php");
             exit;
         } else {
