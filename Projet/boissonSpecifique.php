@@ -15,6 +15,8 @@ if (isset($_GET['boissonSpecifique'])) {
 }
 $index = $_SESSION['boissonSpecifique'];
 $boisson = $Recettes[$index];
+$image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg'; 
+// on initialise le chemain d'accet de l'image en remplacant les vides par un underscore pour corespondre au nom des photos
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +35,9 @@ $boisson = $Recettes[$index];
     </a>
     <p>
         <?php 
+            if (file_exists($image)) {
+                echo '<img src="'.htmlspecialchars($image).'"/>';
+            }
             echo $boisson['titre'];
             echo '<br>';
             echo $boisson['ingredients'];
