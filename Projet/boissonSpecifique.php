@@ -31,7 +31,6 @@ $image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg';
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<<<<<<< HEAD
     <a href="pagePrincipale.php">
         <button>Retour</button>
     </a>
