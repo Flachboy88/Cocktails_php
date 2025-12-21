@@ -8,9 +8,9 @@
 .header {
     width: 100%;
     background: #ffffff;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     padding: 15px 25px;
-    
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -56,7 +56,7 @@
 
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
     min-width: 180px;
     overflow: hidden;
@@ -183,6 +183,348 @@
 }
 
 .boisson {
-	text-decoration: none; 
-	color: black;
+    text-decoration: none;
+    color: black;
+}
+
+
+.btn-retour {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #e85f41;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-retour:hover {
+    background: #cf5339;
+}
+
+/* --- Page Boisson Spécifique --- */
+.boisson-container {
+    max-width: 1000px;
+    margin: 50px auto;
+}
+
+.boisson-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.boisson-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 15px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-retour-action {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-retour-action:hover {
+    background: #5a6268;
+}
+
+.btn-favori {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-favori:hover {
+    background: #e0a800;
+}
+
+.btn-favori.actif {
+    background: #e85f41;
+    color: white;
+}
+
+.boisson-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.boisson-image {
+    width: 50%;
+    height: 50%;
+    display: block;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.boisson-content {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.boisson-titre {
+    font-size: 3em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.boisson-titre::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #e85f41;
+    margin-top: 15px;
+}
+
+.ingredients-list li {
+    background: #fffafa;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    padding-left: 35px !important;
+}
+
+.boisson-section {
+    margin-bottom: 30px;
+}
+
+.boisson-section-title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+    border-bottom: 3px solid #e85f41;
+    padding-bottom: 10px;
+}
+
+.ingredients-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ingredients-list li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+.ingredients-list li:before {
+    content: "🍸";
+    position: absolute;
+    left: 0;
+}
+
+.preparation-text {
+    border-left: 5px solid #e85f41;
+    font-style: italic;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+}
+
+/* Bouton Favori plus stylisé */
+.btn-favori {
+    border-radius: 50px;
+    padding: 12px 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Grille des Favoris (Style Cartes de Collection) --- */
+.favoris-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.favoris-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #e85f41;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.favoris-grid {
+    display: grid;
+    /* 3 ou 4 colonnes selon la largeur de l'écran */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+}
+
+.favoris-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    height: 100%;
+}
+
+.favoris-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(232, 95, 65, 0.2);
+    border-color: #e85f41;
+}
+
+.favoris-card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #f4f4f4;
+    background: #f9f9f9;
+}
+
+.favoris-card-content {
+    padding: 15px;
+    text-align: center;
+}
+
+.favoris-card-title {
+    font-size: 1.2em;
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- Layout Page Principale --- */
+.page-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #e85f41;
+    margin-bottom: 40px;
+}
+
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+@media (max-width: 968px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Sidebar Rubriques --- */
+.sidebar {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+}
+
+.rubrique-title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #e85f41;
+}
+
+.breadcrumb {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    font-size: 0.9em;
+}
+
+.breadcrumb-link {
+    color: #e85f41;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.breadcrumb-link:hover {
+    color: #cf5339;
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: #999;
+}
+
+.sous-categories-title {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.categories-list {
+    list-style: none;
+    padding: 0;
+}
+
+.category-item {
+    margin-bottom: 8px;
+}
+
+.category-link {
+    display: block;
+    padding: 12px 15px;
+    background: #fafafa;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.category-link:hover {
+    background: #fff6f4;
+    border-left-color: #e85f41;
+    transform: translateX(5px);
+}
+
+.no-category {
+    color: #999;
+    font-style: italic;
+    padding: 15px;
+    text-align: center;
+}
+
+/* --- Main Content --- */
+.main-content {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }

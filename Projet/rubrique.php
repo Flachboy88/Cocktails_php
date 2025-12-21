@@ -39,40 +39,42 @@ if (isset($_GET['Aliment'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-<h1>Rubrique</h1>
+<div class="rubrique-container">
+    <h2 class="rubrique-title"> Navigation</h2>
+    
+    <div class="breadcrumb">
+        <?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
+            <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>" class="breadcrumb-link">
+                <?= htmlspecialchars($recherche) ?>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+        <?php endforeach; ?>
+    </div>
 
-<?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
-    <a href="pagePrincipale.php?Aliment=<?= urlencode($recherche) ?>">
-        <?= htmlspecialchars($recherche) ?> /
-    </a>
-<?php endforeach; ?>
+    <h3 class="sous-categories-title">Catégories</h3>
+    
+    <ul class="categories-list">
+        <?php
+        $alimentActuel = $_SESSION['Aliment'];
 
-<br><br>
-
-<?php
-    $alimentActuel = $_SESSION['Aliment'];
-
-    foreach ($Hierarchie as $key => $categorie) :
-        if ($key == $alimentActuel) :
-            if (isset($categorie['sous-categorie'])) :
-                foreach ($categorie['sous-categorie'] as $value) :
-?>
-                <li>
-                    <a href="pagePrincipale.php?Aliment=<?= urlencode($value) ?>">
-                        <?= htmlspecialchars($value) ?>
-                    </a>
-                </li>
-<?php
-            endforeach;
-
-        else :
-            echo "<p>Aucune sous-catégorie disponible.</p>";
-        endif;
-
-    endif;
-
-endforeach;
-?>
-</body>
+        foreach ($Hierarchie as $key => $categorie) :
+            if ($key == $alimentActuel) :
+                if (isset($categorie['sous-categorie'])) :
+                    foreach ($categorie['sous-categorie'] as $value) :
+        ?>
+                    <li class="category-item">
+                        <a href="pagePrincipale.php?Aliment=<?= urlencode($value) ?>" class="category-link">
+                            <?= htmlspecialchars($value) ?>
+                        </a>
+                    </li>
+        <?php
+                    endforeach;
+                else :
+                    echo "<p class='no-category'>Aucune sous-catégorie disponible.</p>";
+                endif;
+            endif;
+        endforeach;
+        ?>
+    </ul>
+</div>
 </html>

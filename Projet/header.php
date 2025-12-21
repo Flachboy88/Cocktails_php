@@ -49,9 +49,11 @@ try {
             <?php if (!isset($_SESSION['user'])): ?>
                 <a href="connexion.php">Connexion</a>
                 <a href="inscription.php">Inscription</a>
+                <a href="favoris.php">Mes favoris</a>
             <?php else: ?>
                 <span class="hello">Bonjour <?= htmlspecialchars($_SESSION['user']['login']) ?></span>
                 <a href="info_perso.php">Modifier mes infos</a>
+                <a href="favoris.php">Mes favoris</a>
                 <a href="deconnexion.php" class="logout">Déconnexion</a>
             <?php endif; ?>
         </div>

@@ -24,17 +24,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$login]);
     $user = $stmt->fetch();
 
-    if ($user) {
-        if ($user['motdepasse'] === $mdp) {
-            $_SESSION['user'] = $user;
-            header("Location: pagePrincipale.php");
-            exit;
-        } else {
-            $err = "Login ou mot de passe incorrect.";
+    if ($user['motdepasse'] === $mdp) {
+    $_SESSION['user'] = $user;
+    
+    // charger les favoris depuis la BDD
+    $stmt_fav = $pdo->prepare("SELECT recette_id FROM recettes_favorites WHERE utilisateur_id = ?");
+    $stmt_fav->execute([$user['id']]);
+    $favoris_bdd = $stmt_fav->fetchAll(PDO::FETCH_COLUMN);
+    
+    // fusionner avec les favoris en session (mode visiteur)
+    if (isset($_SESSION['favoris']) && !empty($_SESSION['favoris'])) {
+        $_SESSION['favoris'] = array_unique(array_merge($_SESSION['favoris'], $favoris_bdd));
+        
+        // sauvegarder les favoris du visiteur en BDD
+        foreach ($_SESSION['favoris'] as $recette_id) {
+            $stmt_insert = $pdo->prepare("INSERT IGNORE INTO recettes_favorites (utilisateur_id, recette_id) VALUES (?, ?)");
+            $stmt_insert->execute([$user['id'], $recette_id]);
         }
     } else {
-        $err = "Login ou mot de passe incorrect.";
+        $_SESSION['favoris'] = $favoris_bdd;
     }
+    
+    header("Location: pagePrincipale.php");
+    exit;
+}
 }
 ?>
 
