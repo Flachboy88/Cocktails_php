@@ -29,7 +29,7 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – Mes Favoris</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
 </head>
 <body>
 
@@ -89,7 +89,7 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
     <?php endif; ?>
 
     <div style="text-align:center; margin-top:40px;">
-        <a href="pagePrincipale.php" class="btn-retour">
+        <a href="<?= BASE_URL ?>/Projet/Code/pagePrincipale.php" class="btn-retour">
             Retour à la page principale
         </a>
     </div>

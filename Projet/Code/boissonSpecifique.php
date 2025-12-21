@@ -2,8 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include 'header.php';
-include 'Donnees.inc.php';
+require_once __DIR__ . '/header.php';
+require_once __DIR__ . '/Donnees.inc.php';
 
 if (!isset($_SESSION['Aliment'])){
     $_SESSION['Aliment'] = 'Aliment';
@@ -55,7 +55,9 @@ $index = $_SESSION['boissonSpecifique'];
 $boisson = $Recettes[$index];
 $isFavori = in_array($index, $_SESSION['favoris']);
 
-$image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg'; 
+$nomImageFichier = str_replace(' ', '_', $boisson['titre']) . '.jpg';
+$cheminPhysique = __DIR__ . '/../Photos/' . $nomImageFichier;
+$cheminURL = BASE_URL . '/Projet/Photos/' . $nomImageFichier;
 
 ?>
 
@@ -64,14 +66,14 @@ $image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg';
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – <?= htmlspecialchars($boisson['titre']) ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
 </head>
 <body>
 
 <div class="boisson-container">
     <div class="boisson-header">
         <div class="boisson-actions">
-            <a href="pagePrincipale.php" class="btn-action btn-retour-action">← Retour</a>
+            <a href="<?= BASE_URL ?>/Projet/Code/pagePrincipale.php" class="btn-action btn-retour-action">← Retour</a>
             
             <a href="boissonSpecifique.php?action=toggle_favori" class="btn-action btn-favori <?= $isFavori ? 'actif' : '' ?>">
                 <?= $isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris' ?>
@@ -82,7 +84,7 @@ $image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg';
     <div class="boisson-card">
         <div class="boisson-content">
         <?php
-        $imageAffichee = file_exists($image) ? $image : 'Photos/mystere.jpg';
+        $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : BASE_URL . '/Projet/Photos/mystere.jpg';
         ?>
         <img src="<?= htmlspecialchars($imageAffichee) ?>"
             alt="<?= htmlspecialchars($boisson['titre']) ?>"
