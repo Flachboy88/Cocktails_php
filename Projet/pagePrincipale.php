@@ -22,22 +22,14 @@ if (!isset($_SESSION['boissonSpecifique'])){
 <body>
 
 <main class="container">
+    <h1>Bienvenue sur MyCocktails</h1>
 
-    <div class="main-content-layout">
-        
-        <div class="rubriques-colonne">
-            <?php include 'rubrique.php'; ?>
-            <br>
-            <a href="index.php" class="btn-home">Retour à l'accueil</a>
-        </div>
+    <?php include 'rubrique.php'; ?>
 
-        <div class="cocktails-colonne">
-            <?php include 'listeCocktails.php'; ?>
-        </div>
-        
-    </div>
     <br><br>
-    
+    <?php include 'listeCocktails.php'; ?>
+    <br><br>
+    <a href="index.php" class="btn-home">Retour à l'accueil</a>
 </main>
 
 </body>

@@ -18,33 +18,9 @@ if (isset($_GET['boissonSpecifique'])) {
 $index = $_SESSION['boissonSpecifique'];
 $boisson = $Recettes[$index];
 
-$isFavorite = false;
-$actionUrl = 'favoris_action.php?id=' . urlencode($index);
+$image = 'Photos/' . str_replace(' ', '_',$boisson['titre']) . '.jpg'; 
+// on initialise le chemain d'accet de l'image en remplacant les vides par un underscore pour corespondre au nom des photos
 
-if (isset($_SESSION['user'])) {
-    $userId = $_SESSION['user']['id'];
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM recettes_favorites WHERE utilisateur_id = ? AND recette_id = ?");
-    $stmt->execute([$userId, $index]);
-    $count = $stmt->fetchColumn();
-    
-    if ($count > 0) {
-        $isFavorite = true;
-        $actionUrl .= '&action=remove';
-    } else {
-        $actionUrl .= '&action=add';
-    }
-} else {
-    // visiteur
-    if (!isset($_SESSION['guest_favorites'])) {
-        $_SESSION['guest_favorites'] = [];
-    }
-    if (in_array($index, $_SESSION['guest_favorites'])) {
-        $isFavorite = true;
-        $actionUrl .= '&action=remove';
-    } else {
-        $actionUrl .= '&action=add';
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -55,49 +31,25 @@ if (isset($_SESSION['user'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<main class="cocktail-detail-page">
-    <div class="cocktail-actions">
-        <a href="pagePrincipale.php" class="btn-action btn-back">
-            < Retour
-        </a>
-        
-        <a href="<?= $actionUrl ?>" class="btn-action btn-favorite">
-            <?= $isFavorite ? '★ Retirer des Favoris' : '☆ Ajouter aux Favoris' ?>
-        </a>
-        
-    </div>
-
-    <div class="cocktail-card">
-        <h1 class="cocktail-title"><?= htmlspecialchars($boisson['titre']) ?></h1>
-        
-        <section class="cocktail-section">
-            <h2 class="section-subtitle">Ingrédients</h2>
-            <ul class="ingredients-list">
-                <?php 
-                $ingredients = explode('|', $boisson['ingredients']);
-                foreach ($ingredients as $ingredient) :
-                    $trimmed_ingredient = trim($ingredient);
-                    if (!empty($trimmed_ingredient)) :
-                ?>
-                    <li><?= htmlspecialchars($trimmed_ingredient) ?></li>
-                <?php
-                    endif;
-                endforeach;
-                ?>
-            </ul>
-        </section>
-
-        <section class="cocktail-section">
-            <h2 class="section-subtitle">Préparation</h2>
-            <div class="preparation-text">
-                <?php 
-                echo nl2br(htmlspecialchars($boisson['preparation'])); // saut de ligne
-                ?>
-            </div>
-        </section>
-    </div>
-</main>
+    <a href="pagePrincipale.php">
+        <button>Retour</button>
+    </a>
+    <a href="pagePrincipale.php">
+        <button>Favorit</button>
+    </a>
+    <p>
+        <?php 
+            if (file_exists($image)) {
+                echo '<img src="'.htmlspecialchars($image).'"/>';
+            }
+            echo $boisson['titre'];
+            echo '<br>';
+            echo $boisson['ingredients'];
+            echo '<br>';
+            echo $boisson['preparation'];
+            echo '<br>';
+         ?>
+    </p>
     
 </body>
 </html>

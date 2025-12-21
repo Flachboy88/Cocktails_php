@@ -1,5 +1,5 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
+<?php 
+if (session_status() === PHP_SESSION_NONE) { //initialisation
     session_start();
 }
 
@@ -16,44 +16,29 @@ if (!isset($_SESSION['boissonSpecifique'])) {
     $_SESSION['boissonSpecifique'] = 0;
 }
 
-function getAllDescendants($category, $Hierarchie, &$descendants) {
-    // ajoute la catégorie elle-même
-    if (!in_array($category, $descendants) && $category !== 'Aliment') {
-        $descendants[] = $category;
+$liste_feuille = [];
+function cherche_arbre($noeud,$Hierarchie,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
+    if (!isset($Hierarchie[$noeud]['sous-categorie'])){ // si le noeud est une feuille on l'ajoute la la liste de feuille
+        $liste_feuille[] = $noeud; 
     }
-    
-    // si sous categories récursion
-    if (isset($Hierarchie[$category]) && isset($Hierarchie[$category]['sous-categorie'])) {
-        foreach ($Hierarchie[$category]['sous-categorie'] as $subCategory) {
-            getAllDescendants($subCategory, $Hierarchie, $descendants);
+    else{
+        foreach ($Hierarchie[$noeud]['sous-categorie'] as $key){ // sinon on applique la fonction a toutes les sous-catégories
+            cherche_arbre($key,$Hierarchie,$liste_feuille);
         }
     }
+
 }
 
-$currentAliment = $_SESSION['Aliment'];
-$allowedIngredients = [];
-$filteredRecettes = [];
-
-if ($currentAliment === 'Aliment') {
-    $filteredRecettes = $Recettes;
-} else {
-    getAllDescendants($currentAliment, $Hierarchie, $allowedIngredients);
-    
-    // filtre
-    foreach ($Recettes as $index => $recette) {
-        $appartient = false;
-        // vérifie si au moins un ingrédient de la recette est dans la liste des ingrédients
-        foreach ($recette['index'] as $ingredientRecette) {
-             if (in_array($ingredientRecette, $allowedIngredients)) {
-                $appartient = true;
-                break;
+function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles avec les ingrédient de la boisson. Si il y en a au moins une en commun. alors on revoie true (ce qui permetera d'afficher la boisson)
+    foreach($tab1 as $tab11){
+        foreach($tab2 as $tab22){
+            if($tab11 == $tab22){
+                return true;
             }
         }
-        
-        if ($appartient) {
-            $filteredRecettes[$index] = $recette;
-        }
     }
+
+    return false;
 }
 ?>
 
@@ -69,15 +54,36 @@ if ($currentAliment === 'Aliment') {
     <h1>Cocktails disponibles</h1>
     <ul>
     <?php 
-    foreach ($filteredRecettes as $r => $nomboisson):?>
-        <li class="cocktails-list-item">
-            <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($r) ?>">
-                <?= htmlspecialchars($nomboisson['titre']) ?>
-            </a>
-        </li>
-    <?php endforeach;?>
-    </ul>
-    
+
+        if ($_SESSION['Aliment'] == 'Aliment'){
+            foreach ($Recettes as $r => $nomboisson):?>
+                <li>
+                    <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($r) ?>">
+                        <?= htmlspecialchars($nomboisson['titre']) ?>
+                    </a>
+                </li>
+            <?php endforeach;
+        }
+        else {
+            cherche_arbre($_SESSION['Aliment'],$Hierarchie,$liste_feuille);
+            foreach ($Recettes as $r => $nomboisson):
+            if (cherche_comparaison($nomboisson['index'],$liste_feuille)):?>
+                <li>
+                    <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($r) ?>">
+                        <?= htmlspecialchars($nomboisson['titre']) ?>
+                    </a>
+                </li>
+            <?php endif;
+            endforeach;
+            /*echo "<ul>"; //test de $liste_feuille
+                foreach ($liste_feuille as $element) {
+                    echo "<li>$element</li>";
+                }
+            echo "</ul>";*/
+
+        }
+    ?>
+    </p>
 </main>
 
 </body>
