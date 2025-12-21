@@ -1,6 +1,7 @@
 <?php
 session_start();
-include 'header.php';
+include __DIR__ . '/header.php'; // inclus header depuis le même dossier ou adapté
+
 if (!isset($_SESSION['Aliment'])){
     $_SESSION['Aliment'] = 'Aliment';
 }
@@ -17,7 +18,8 @@ if (!isset($_SESSION['boissonSpecifique'])){
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – Page Principale</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
+    <!-- Style depuis la racine du projet -->
+    <link rel="stylesheet" href="<?= $projectRoot ?>/style.css">
 </head>
 <body>
 
@@ -26,6 +28,7 @@ if (!isset($_SESSION['boissonSpecifique'])){
 
     <div class="content-wrapper">
         <aside class="sidebar">
+            <!-- Rubrique depuis le même dossier -->
             <?php include 'rubrique.php'; ?>
         </aside>
         
@@ -35,7 +38,8 @@ if (!isset($_SESSION['boissonSpecifique'])){
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
-        <a href="<?= BASE_URL ?>/index.php" class="btn-retour">Retour à l'accueil</a>
+        <!-- Retour à l'accueil depuis la racine -->
+        <a href="<?= $projectRoot ?>/index.php" class="btn-retour">Retour à l'accueil</a>
     </div>
 </main>
 

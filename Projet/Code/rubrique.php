@@ -36,7 +36,7 @@ if (isset($_GET['Aliment'])) {
 <head>
     <title>Rubrique</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 
 <div class="rubrique-container">

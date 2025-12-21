@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) { //initialisation
 
 include 'Donnees.inc.php'; 
 
-// ... (Logique de session et de filtrage inchangée) ...
+
 if (!isset($_SESSION['Aliment'])){
     $_SESSION['Aliment'] = 'Aliment';
 }
@@ -46,7 +46,7 @@ function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles a
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 

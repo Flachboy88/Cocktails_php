@@ -61,7 +61,7 @@ $user = $_SESSION['user'];
 <head>
     <meta charset="UTF-8">
     <title>Mes informations personnelles</title>
-    <link rel="stylesheet" href=" <?= BASE_URL ?>/style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 

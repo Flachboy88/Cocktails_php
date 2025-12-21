@@ -1,14 +1,12 @@
 <?php
-// démarrer la session si elle n'est pas déjà active
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// inclusion du header commun et des données des recettes
 include 'header.php';
 include 'Donnees.inc.php';
+$rootURL = $GLOBALS['projectRoot'];
 
-// initialisation du tableau des favoris en session
 if (!isset($_SESSION['favoris'])) {
     $_SESSION['favoris'] = [];
 }
@@ -29,7 +27,7 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – Mes Favoris</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
+    <link rel="stylesheet" href="<?= $rootURL ?>/style.css">
 </head>
 <body>
 
@@ -52,33 +50,34 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
             <?php foreach ($_SESSION['favoris'] as $recette_id): ?>
 
                 <?php if (isset($Recettes[$recette_id])): 
-                    // récupération des données de la recette à partir de son id
                     $recette = $Recettes[$recette_id];
-                    // construction du chemin de l'image associée à la recette
-                    $image = 'Photos/' . str_replace(' ', '_', $recette['titre']) . '.jpg';
+                    $nomFichier = str_replace(' ', '_', $recette['titre']) . '.jpg';
+                    
+                    // 1. Chemin pour que le PHP vérifie l'existence du fichier sur le disque
+                    $cheminPhysique = __DIR__ . '/../Photos/' . $nomFichier;
+                    
+                    // 2. Chemin pour que le NAVIGATEUR affiche l'image (URL)
+                    $cheminURL = $rootURL . '/Projet/Photos/' . $nomFichier;
+                    $imageMystere = $rootURL . '/Projet/Photos/mystere.jpg';
                 ?>
 
                 <li>
-                    <a 
-                        href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($recette_id) ?>" 
-                        class="favoris-card"
-                    >
+                    <a href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($recette_id) ?>" class="favoris-card">
 
                         <?php
-                        // utilisation d'une image par défaut si l'image de la recette n'existe pas
-                        $imageAffichee = file_exists($image) ? $image : 'Photos/mystere.jpg';
+                        // Vérification physique de l'image
+                        $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : $imageMystere;
                         ?>
+                        
                         <img src="<?= htmlspecialchars($imageAffichee) ?>"
-                            alt="<?= htmlspecialchars($boisson['titre']) ?>"
-                                class="favoris-card-img"
-                            >
+                             alt="<?= htmlspecialchars($recette['titre']) ?>"
+                             class="favoris-card-img">
                     
                         <div class="favoris-card-content">
                             <h3 class="favoris-card-title">
                                 <?= htmlspecialchars($recette['titre']) ?>
                             </h3>
                         </div>
-
                     </a>
                 </li>
 
@@ -89,7 +88,7 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
     <?php endif; ?>
 
     <div style="text-align:center; margin-top:40px;">
-        <a href="<?= BASE_URL ?>/Projet/Code/pagePrincipale.php" class="btn-retour">
+        <a href="pagePrincipale.php" class="btn-retour">
             Retour à la page principale
         </a>
     </div>

@@ -57,7 +57,7 @@ $isFavori = in_array($index, $_SESSION['favoris']);
 
 $nomImageFichier = str_replace(' ', '_', $boisson['titre']) . '.jpg';
 $cheminPhysique = __DIR__ . '/../Photos/' . $nomImageFichier;
-$cheminURL = BASE_URL . '/Projet/Photos/' . $nomImageFichier;
+$cheminURL = '../Photos/' . $nomImageFichier;
 
 ?>
 
@@ -66,14 +66,14 @@ $cheminURL = BASE_URL . '/Projet/Photos/' . $nomImageFichier;
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – <?= htmlspecialchars($boisson['titre']) ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
 <div class="boisson-container">
     <div class="boisson-header">
         <div class="boisson-actions">
-            <a href="<?= BASE_URL ?>/Projet/Code/pagePrincipale.php" class="btn-action btn-retour-action">← Retour</a>
+            <a href="pagePrincipale.php" class="btn-action btn-retour-action">← Retour</a>
             
             <a href="boissonSpecifique.php?action=toggle_favori" class="btn-action btn-favori <?= $isFavori ? 'actif' : '' ?>">
                 <?= $isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris' ?>
@@ -84,7 +84,7 @@ $cheminURL = BASE_URL . '/Projet/Photos/' . $nomImageFichier;
     <div class="boisson-card">
         <div class="boisson-content">
         <?php
-        $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : BASE_URL . '/Projet/Photos/mystere.jpg';
+        $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : '../Photos/mystere.jpg';
         ?>
         <img src="<?= htmlspecialchars($imageAffichee) ?>"
             alt="<?= htmlspecialchars($boisson['titre']) ?>"
