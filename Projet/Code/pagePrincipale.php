@@ -11,6 +11,12 @@ if (!isset($_SESSION['ArbreDeRecherche'])){
 if (!isset($_SESSION['boissonSpecifique'])){
     $_SESSION['boissonSpecifique'] = 0;
 }
+if (!isset($_SESSION['tagsValide'])){
+    $_SESSION['tagsValide'] = [];
+}
+if (!isset($_SESSION['tagsNonValide'])){
+    $_SESSION['tagsNonValide'] = [];
+}
 ?>
 
 <!DOCTYPE html>

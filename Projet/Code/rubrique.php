@@ -1,5 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
+if (session_status() === PHP_SESSION_NONE) { // initialisation
     session_start();
 }
 if (!isset($_SESSION['Aliment'])){
@@ -10,7 +10,10 @@ if (!isset($_SESSION['ArbreDeRecherche'])){
 }
 include 'Donnees.inc.php';
 
-if (isset($_GET['Aliment'])) {
+
+//Lorsqu'une interaction est détectée dans la classe, le tableau est mis à jour : si l'élément est nouveau, il est ajouté à la fin ;
+//s'il y est déjà, tout ce qui le suit est supprimé. Cette méthode permet d'éviter les problèmes liés à la présence de plusieurs superclasses.
+if (isset($_GET['Aliment'])) { 
     $_SESSION['Aliment'] = $_GET['Aliment'];
 
     $nouv = true;
@@ -41,6 +44,9 @@ if (isset($_GET['Aliment'])) {
 
 <div class="rubrique-container">
     <h2 class="rubrique-title"> Navigation</h2>
+
+<!-- On affiche le chemin de recherche jusqu'à l'aliment sélectionné. Les différents éléments sont cliquables afin de pouvoir modifier l'aliment sélectionné. -->
+
     
     <div class="breadcrumb">
         <?php foreach ($_SESSION['ArbreDeRecherche'] as $recherche) : ?>
@@ -52,6 +58,8 @@ if (isset($_GET['Aliment'])) {
     </div>
 
     <h3 class="sous-categories-title">Catégories</h3>
+    <!-- On affiche toutes les sous categorie de l'aliment sélectionné. Les différents éléments sont cliquables afin de pouvoir modifier l'aliment sélectionné. -->
+
     
     <ul class="categories-list">
         <?php
@@ -77,4 +85,7 @@ if (isset($_GET['Aliment'])) {
         ?>
     </ul>
 </div>
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="tags.php" class="btn-retour">Tags</a>
+    </div>
 </html>

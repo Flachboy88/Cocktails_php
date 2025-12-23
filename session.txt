@@ -1,0 +1,5 @@
+$_SESSION['Aliment'] : l'aliment selectionné dans l'arbre de recherche
+$_SESSION['ArbreDeRecherche'] : affichage du chemin de l'arbre de recherche par un tableau d'arian: évite l'affichage de deux tags supercategorie
+$_SESSION['boissonSpecifique'] : index de la boisson choisie
+$_SESSION['tagsValide'] : liste des tags valides
+$_SESSION['tagsNonValide'] : listes des tags invalides

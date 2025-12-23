@@ -17,13 +17,14 @@ if (!isset($_SESSION['boissonSpecifique'])) {
 }
 
 $liste_feuille = [];
-function cherche_arbre($noeud,$Hierarchie,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
+function cherche_arbre($noeud,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
+    global $Hierarchie;
     if (!isset($Hierarchie[$noeud]['sous-categorie'])){ // si le noeud est une feuille on l'ajoute la la liste de feuille
         $liste_feuille[] = $noeud; 
     }
     else{
         foreach ($Hierarchie[$noeud]['sous-categorie'] as $key){ // sinon on applique la fonction a toutes les sous-catégories
-            cherche_arbre($key,$Hierarchie,$liste_feuille);
+            cherche_arbre($key,$liste_feuille);
         }
     }
 
@@ -65,7 +66,7 @@ function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles a
             <?php endforeach;
         }
         else {
-            cherche_arbre($_SESSION['Aliment'],$Hierarchie,$liste_feuille);
+            cherche_arbre($_SESSION['Aliment'],$liste_feuille);
             foreach ($Recettes as $r => $nomboisson):
             if (cherche_comparaison($nomboisson['index'],$liste_feuille)):?>
                 <li>
