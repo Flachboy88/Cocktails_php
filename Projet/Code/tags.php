@@ -1,7 +1,5 @@
 <?php
 
-// Mathias ne modifie rien pour le moments stp
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -17,8 +15,8 @@ foreach($Hierarchie as $nom => $objet){ // on recupère toutes les feuilles
     if (!isset($objet['sous-categorie'])) {
         $feuille[] = $nom;
     }
-
 }
+sort($feuille, SORT_STRING); //on les tries par ordre alphabétique
 if (isset($_POST["submit"])){//lorsqu'on apuis sur le boutton valider on vas associers les résultats au tags valides 
     $_SESSION['tagsValide'] = []; //on pense bien a reset les deux tableaux pour eviter les doublons
     $_SESSION['tagsNonValide'] = [];
@@ -70,13 +68,13 @@ if (isset($_POST['reset'])) {// lorsque le bouton reset est utilisée
                     }
                     echo "</ul>";
                 } 
-                if (!empty($_SESSION['tagsValide'])) {
+                /*if (!empty($_SESSION['tagsValide'])) {
                     echo "<ul>";
-                    foreach ($_SESSION['tagsNonValide'] as $tag) {
+                    foreach ($_SESSION['tagsValide'] as $tag) {
                         echo "<li>" . htmlspecialchars($tag) . "</li>";
                     }
                     echo "</ul>";
-                }*/ 
+                }*/
  
             ?>
             <input name="submit" type="submit" value="Valider" />
