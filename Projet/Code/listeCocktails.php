@@ -43,7 +43,7 @@ function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles a
 
 $tab_tag = [];
 function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier les différantes recette en fonction du nombres de tags valides
-    // on utilise un double tableau pour stocker les boissons en foction du nombre de tags
+    // on utilise un double tableau pour stocker les boissons en foction du nombre de tags. la première entrée est le nombre de tag, la deuxième le nom des boissons
     $i = 0;
     foreach ($boisson['index'] as $index){
         if (in_array($index, $_SESSION['tagsValide'])) {
@@ -68,7 +68,8 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
 
 <main>
     <h1>Cocktails disponibles</h1>
-    <ul>
+    <input type="text" id="search" placeholder="Rechercher un cocktail..." />
+    <ul id="listeC">
     <?php 
 
         if ($_SESSION['Aliment'] == 'Aliment' && empty($_SESSION["tagsValide"]) && empty($_SESSION["tagsNonValide"])){ // dans le cas ou il n'y a pas de tags et où on utilise la base de l'arbre on affiche juste toutes les boissons
@@ -81,9 +82,10 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
             <?php endforeach;
         }
         else {
-            cherche_arbre($_SESSION['Aliment'],$liste_feuille);
+            cherche_arbre($_SESSION['Aliment'],$liste_feuille);// on cherche a trouver toutes les feuilles depuis un certain noeud
             foreach ($Recettes as $nomboisson => $boisson):
-            if (cherche_comparaison($boisson['index'],$liste_feuille) && !cherche_comparaison($boisson['index'], $_SESSION["tagsNonValide"])):
+            if (cherche_comparaison($boisson['index'],$liste_feuille) && !cherche_comparaison($boisson['index'], $_SESSION["tagsNonValide"])): 
+                //on test si un des ingrédiants de la boisson apparait dans la liste de feuille et qu'aucun n'apparais dans tagsNonValide
                 if (empty($_SESSION["tagsValide"])):?> <!-- cas ou il n'y a pas de Tags demandé par l'Utilisateur: pas besoin de trier --> 
                 
                 <li>
@@ -92,13 +94,13 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
                     </a>
                 </li>
             <?php 
-                else:
+                else: //cas ou il y a des Tags demandé par l'Utilisateur: on met les boissons a affichier dans un tableau plutot que de les afficher directement. aussi on stocke le nombe de tags associés
                     cherche_nb_tags($nomboisson,$boisson,$tab_tag);
                 ?>
                <?php endif;
             endif;
             endforeach;
-            if (!empty($_SESSION["tagsValide"]) && !empty($tab_tag)) :
+            if (!empty($_SESSION["tagsValide"])) :
                 krsort($tab_tag); // on retourne le tableau pour afficher les boisson avec le plus de tags en premier 
                 foreach ($tab_tag as $nbTags => $boissons) :
                     foreach ($boissons as $nomboisson) :?>
@@ -121,7 +123,7 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
 
         }
     ?>
-    </p>
+    </ul>
 </main>
 
 </body>
