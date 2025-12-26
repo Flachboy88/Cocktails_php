@@ -34,7 +34,6 @@ if (!isset($_SESSION['tagsNonValide'])){
 
     <div class="content-wrapper">
         <aside class="sidebar">
-            <!-- Rubrique depuis le même dossier -->
             <?php include 'rubrique.php'; ?>
         </aside>
         
@@ -44,7 +43,6 @@ if (!isset($_SESSION['tagsNonValide'])){
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
-        <!-- Retour à l'accueil depuis la racine -->
         <a href="<?= $projectRoot ?>/index.php" class="btn-retour">Retour à l'accueil</a>
     </div>
 </main>

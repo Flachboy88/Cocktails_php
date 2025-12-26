@@ -85,7 +85,5 @@ if (isset($_GET['Aliment'])) {
         ?>
     </ul>
 </div>
-    <div style="text-align: center; margin-top: 40px;">
-        <a href="tags.php" class="btn-retour">Tags</a>
-    </div>
+    
 </html>

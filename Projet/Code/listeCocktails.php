@@ -16,6 +16,27 @@ if (!isset($_SESSION['boissonSpecifique'])) {
     $_SESSION['boissonSpecifique'] = 0;
 }
 
+// filtres
+if (isset($_POST['applyFilters'])) {
+    $_SESSION['tagsNonValide'] = [];
+    
+    // Récupérer toutes les feuilles
+    $toutesLesFeuilles = [];
+    foreach($Hierarchie as $nom => $objet){
+        if (!isset($objet['sous-categorie'])) {
+            $toutesLesFeuilles[] = $nom;
+        }
+    }
+    
+    // tags cochés acceptés sinon bannis
+    $tagsCoches = isset($_POST['tags']) ? $_POST['tags'] : [];
+    $_SESSION['tagsNonValide'] = array_diff($toutesLesFeuilles, $tagsCoches);
+}
+
+if (isset($_POST['resetFilters'])) {
+    $_SESSION['tagsNonValide'] = [];
+}
+
 $liste_feuille = [];
 function cherche_arbre($noeud,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
     global $Hierarchie;
@@ -55,22 +76,58 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
     if($i >= 1){
         $tab_tag[$i][] = $nomboisson;
     }
+
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../style.css">
-</head>
-<body>
 
 <main>
     <h1>Cocktails disponibles</h1>
     <div class=input-control>
         <input type="text" id="search" placeholder="Rechercher un cocktail..." />
     </div>
+
+    <!-- bouton et menu de tri -->
+    <div class="filter-section">
+        <button type="button" id="toggleFilters" class="btn-filter">
+            Filtres & Tags
+        </button>
+        
+        <div id="filterMenu" class="filter-menu" style="display: none;">
+            <form method="post" action="pagePrincipale.php">
+                <div class="filter-columns">
+                    <?php 
+                    // récupérer toutes les feuilles
+                    $feuilles = [];
+                    foreach($Hierarchie as $nom => $objet){
+                        if (!isset($objet['sous-categorie'])) {
+                            $feuilles[] = $nom;
+                        }
+                    }
+                    sort($feuilles, SORT_STRING);
+                    
+                    foreach ($feuilles as $nom):
+                        $nomPost = str_replace(' ', '_', $nom);
+                        $estValide = in_array($nom, $_SESSION['tagsValide']);
+                        $estBanni = in_array($nom, $_SESSION['tagsNonValide']);
+                    ?>
+                        <label class="filter-item">
+                            <input type="checkbox" 
+                                name="tags[]" 
+                                value="<?= htmlspecialchars($nom) ?>"
+                                <?= (!$estBanni) ? 'checked' : '' ?>>
+                            <span><?= htmlspecialchars($nom) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                
+                <div class="filter-actions">
+                    <button type="submit" name="applyFilters" class="btn-apply">✓ Appliquer</button>
+                    <button type="submit" name="resetFilters" class="btn-reset">↺ Réinitialiser</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <ul id="listeC">
     <?php 
 
@@ -129,19 +186,24 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
 </main>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    
+    //  filtrer les cocktails en temps réel
     const searchInput = document.getElementById("search");
-    const liste = document.getElementById("listeC");
-    const items = liste.getElementsByTagName("li");
+    const items = document.getElementById("listeC").getElementsByTagName("li");
+    
     searchInput.addEventListener("keyup", function () {
-        const filtre = searchInput.value.toLowerCase();
-        for (let i = 0; i < items.length; i++) {
-            const lien = items[i].getElementsByTagName("a")[0];
-            const texte = lien.textContent.toLowerCase();
-            if (texte.includes(filtre)) {items[i].style.display = "";}
-            else {items[i].style.display = "none";}
+        const filtre = this.value.toLowerCase();  // 'this' = searchInput
+        
+        for (let item of items) {  // Boucle simplifiée
+            const texte = item.textContent.toLowerCase();
+            item.style.display = texte.includes(filtre) ? "" : "none"; 
         }
+    });
+
+    // afficher/cacher le menu
+    document.getElementById("toggleFilters").addEventListener("click", function() {
+        const menu = document.getElementById("filterMenu");
+        menu.style.display = menu.style.display === "none" ? "block" : "none";
     });
 });
 </script>
-</body>
-</html>
