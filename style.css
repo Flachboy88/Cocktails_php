@@ -334,7 +334,6 @@
 }
 
 .ingredients-list li:before {
-    content: "🍸";
     position: absolute;
     left: 0;
 }
@@ -521,7 +520,6 @@
     text-align: center;
 }
 
-/* --- Main Content --- */
 .main-content {
     background: white;
     border-radius: 15px;
