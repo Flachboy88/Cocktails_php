@@ -68,7 +68,9 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
 
 <main>
     <h1>Cocktails disponibles</h1>
-    <input type="text" id="search" placeholder="Rechercher un cocktail..." />
+    <div class=input-control>
+        <input type="text" id="search" placeholder="Rechercher un cocktail..." />
+    </div>
     <ul id="listeC">
     <?php 
 
@@ -125,6 +127,21 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
     ?>
     </ul>
 </main>
-
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search");
+    const liste = document.getElementById("listeC");
+    const items = liste.getElementsByTagName("li");
+    searchInput.addEventListener("keyup", function () {
+        const filtre = searchInput.value.toLowerCase();
+        for (let i = 0; i < items.length; i++) {
+            const lien = items[i].getElementsByTagName("a")[0];
+            const texte = lien.textContent.toLowerCase();
+            if (texte.includes(filtre)) {items[i].style.display = "";}
+            else {items[i].style.display = "none";}
+        }
+    });
+});
+</script>
 </body>
 </html>
