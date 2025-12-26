@@ -14,10 +14,15 @@ require_once __DIR__ . '/Projet/Code/header.php';
 <body>
 
 <main class="container">
-    <h1>Bienvenue sur l'application de recettes</h1>  
-    <p>Accéder à la page principale : 
-        <a href="Projet/Code/pagePrincipale.php">Page principale</a>
-    </p>
+    
+    <section class="hero">
+        <h1>Bienvenue sur MyCocktails</h1>
+        <p>Trouvez les recettes de vos préférés</p>
+    
+        <a href="Projet/Code/pagePrincipale.php" class="hero-btn">
+            Visiter le site
+        </a>
+    </section>
 </main>
 
 </body>

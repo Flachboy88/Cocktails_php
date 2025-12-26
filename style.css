@@ -89,6 +89,59 @@
     color: #d9534f;
 }
 
+
+/* --- Page d'accueil (Hero) --- */
+.hero {
+    width: 100%;
+    height: calc(100vh - 90px);
+    background: url("Projet/Photos/fondEcran.jpg") center / cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+    gap: 25px;
+    color: white;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero h1 {
+    font-size: 3em;
+}
+
+.hero p {
+    font-size: 1.3em;
+    opacity: 0.9;
+}
+
+.hero-btn {
+    position: relative;
+    z-index: 1;
+
+    padding: 18px 40px;
+    background: #e85f41;
+    color: white;
+    text-decoration: none;
+    font-size: 1.4em;
+    font-weight: bold;
+
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hero-btn:hover {
+    background: #cf5339;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+
 /* --- Page d'inscription --- */
 
 .form-container {
