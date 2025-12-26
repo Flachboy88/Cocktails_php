@@ -649,3 +649,69 @@
 .btn-reset:hover {
     background: #5a6268;
 }
+
+.filter-item.tristate {
+    padding: 0;
+}
+
+.tristate-btn {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.tristate-btn:hover {
+    border-color: #999;
+}
+
+.tristate-btn .tag-icon::after {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* État neutre (par défaut) */
+.tristate-btn.state-neutral {
+    background: #f5f5f5;
+    border-color: #ddd;
+}
+
+.tristate-btn.state-neutral .tag-icon::after {
+    content: '○';
+    color: #999;
+}
+
+/* État "Je veux" */
+.tristate-btn.state-onVeut {
+    background: #e8f5e9;
+    border-color: #4caf50;
+}
+
+.tristate-btn.state-onVeut .tag-icon::after {
+    content: 'V';
+    color: #4caf50;
+}
+
+/* État "Je ne veux pas" */
+.tristate-btn.state-ban {
+    background: #ffebee;
+    border-color: #f44336;
+}
+
+.tristate-btn.state-ban .tag-icon::after {
+    content: 'X';
+    color: #f44336;
+}
+
+.score-tag {
+    color: #666;
+    font-size: 0.9em;
+    margin-left: 8px;
+    font-weight: normal;
+}

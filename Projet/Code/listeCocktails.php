@@ -18,23 +18,26 @@ if (!isset($_SESSION['boissonSpecifique'])) {
 
 // filtres
 if (isset($_POST['applyFilters'])) {
+    $_SESSION['tagsValide'] = [];
     $_SESSION['tagsNonValide'] = [];
     
-    // Récupérer toutes les feuilles
-    $toutesLesFeuilles = [];
-    foreach($Hierarchie as $nom => $objet){
-        if (!isset($objet['sous-categorie'])) {
-            $toutesLesFeuilles[] = $nom;
+    if (isset($_POST['tags'])) {
+        foreach ($_POST['tags'] as $tagPost => $etat) {
+            $tagNom = str_replace('_', ' ', $tagPost);
+            
+            if ($etat === 'onVeut') {
+                $_SESSION['tagsValide'][] = $tagNom;
+            } elseif ($etat === 'ban') {
+                $_SESSION['tagsNonValide'][] = $tagNom;
+            }
+            // 'neutral' = on ne fait rien
         }
     }
-    
-    // tags cochés acceptés sinon bannis
-    $tagsCoches = isset($_POST['tags']) ? $_POST['tags'] : [];
-    $_SESSION['tagsNonValide'] = array_diff($toutesLesFeuilles, $tagsCoches);
 }
 
 if (isset($_POST['resetFilters'])) {
     $_SESSION['tagsNonValide'] = [];
+    $_SESSION['tagsValide'] = [];
 }
 
 $liste_feuille = [];
@@ -110,13 +113,18 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
                         $estValide = in_array($nom, $_SESSION['tagsValide']);
                         $estBanni = in_array($nom, $_SESSION['tagsNonValide']);
                     ?>
-                        <label class="filter-item">
-                            <input type="checkbox" 
-                                name="tags[]" 
-                                value="<?= htmlspecialchars($nom) ?>"
-                                <?= (!$estBanni) ? 'checked' : '' ?>>
-                            <span><?= htmlspecialchars($nom) ?></span>
-                        </label>
+                        <div class="filter-item tristate">
+                            <input type="hidden" 
+                                name="tags[<?= htmlspecialchars($nomPost) ?>]" 
+                                value="<?= $estValide ? 'onVeut' : ($estBanni ? 'ban' : 'neutral') ?>" 
+                                class="tristate-value">
+                            <button type="button" 
+                                class="tristate-btn state-<?= $estValide ? 'onVeut' : ($estBanni ? 'ban' : 'neutral') ?>" 
+                                data-tag="<?= htmlspecialchars($nomPost) ?>">
+                                <span class="tag-name"><?= htmlspecialchars($nom) ?></span>
+                                <span class="tag-icon"></span>
+                            </button>
+                        </div>
                     <?php endforeach; ?>
                 </div>
                 
@@ -141,32 +149,52 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
             <?php endforeach;
         }
         else {
-            cherche_arbre($_SESSION['Aliment'],$liste_feuille);// on cherche a trouver toutes les feuilles depuis un certain noeud
+            cherche_arbre($_SESSION['Aliment'],$liste_feuille);
             foreach ($Recettes as $nomboisson => $boisson):
-            if (cherche_comparaison($boisson['index'],$liste_feuille) && !cherche_comparaison($boisson['index'], $_SESSION["tagsNonValide"])): 
-                //on test si un des ingrédiants de la boisson apparait dans la liste de feuille et qu'aucun n'apparais dans tagsNonValide
-                if (empty($_SESSION["tagsValide"])):?> <!-- cas ou il n'y a pas de Tags demandé par l'Utilisateur: pas besoin de trier --> 
+                // vérifier qu'il n'y a pas d'ingrédients bannis
+                if (cherche_comparaison($boisson['index'], $_SESSION["tagsNonValide"])) {
+                    continue;
+                }
                 
-                <li>
-                    <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($nomboisson) ?>">
-                        <?= htmlspecialchars($boisson['titre']) ?>
-                    </a>
-                </li>
-            <?php 
-                else: //cas ou il y a des Tags demandé par l'Utilisateur: on met les boissons a affichier dans un tableau plutot que de les afficher directement. aussi on stocke le nombe de tags associés
-                    cherche_nb_tags($nomboisson,$boisson,$tab_tag);
-                ?>
-               <?php endif;
-            endif;
+                // on verifie si le nom de la boisson apparait dans la liste de feuille
+                $matchArbre = cherche_comparaison($boisson['index'], $liste_feuille);
+                
+                // on compte le score des tags
+                $scoreTag = 0;
+                if (!empty($_SESSION["tagsValide"])) {
+                    foreach ($boisson['index'] as $index) {
+                        if (in_array($index, $_SESSION['tagsValide'])) {
+                            $scoreTag++;
+                        }
+                    }
+                }
+                
+                //  match arbre ou score > 0
+                if ($matchArbre || $scoreTag > 0) {
+                    if (empty($_SESSION["tagsValide"])) {
+                        ?>
+                        <li>
+                            <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($nomboisson) ?>">
+                                <?= htmlspecialchars($boisson['titre']) ?>
+                            </a>
+                        </li>
+                        <?php
+                    } else {
+                        // avec tags on stock pour tri
+                        $tab_tag[$scoreTag][] = $nomboisson;
+                    }
+                }
             endforeach;
-            if (!empty($_SESSION["tagsValide"])) :
-                krsort($tab_tag); // on retourne le tableau pour afficher les boisson avec le plus de tags en premier 
+            
+            // on affiche les boissons avec le plus de tags en premier
+            if (!empty($_SESSION["tagsValide"]) && !empty($tab_tag)) :
+                krsort($tab_tag);
                 foreach ($tab_tag as $nbTags => $boissons) :
                     foreach ($boissons as $nomboisson) :?>
                         <li>
                             <a class="boisson" href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($nomboisson) ?>">
                                 <?= htmlspecialchars($Recettes[$nomboisson]['titre']) ?>
-                                (<?= $nbTags ?>)
+                                <span class="score-tag">(<?= $nbTags ?>/<?= count($_SESSION['tagsValide']) ?>)</span>
                             </a>
                         </li>
                     <?php
@@ -204,6 +232,27 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("toggleFilters").addEventListener("click", function() {
         const menu = document.getElementById("filterMenu");
         menu.style.display = menu.style.display === "none" ? "block" : "none";
+    });
+
+    // Gestion des boutons tristate
+    document.querySelectorAll('.tristate-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('.tristate-value');
+            const currentState = input.value;
+            
+            //neutral -> onVeut -> ban -> neutral
+            let newState;
+            if (currentState === 'neutral') {
+                newState = 'onVeut';
+            } else if (currentState === 'onVeut') {
+                newState = 'ban';
+            } else {
+                newState = 'neutral';
+            }
+            
+            input.value = newState;
+            this.className = 'tristate-btn state-' + newState;
+        });
     });
 });
 </script>
