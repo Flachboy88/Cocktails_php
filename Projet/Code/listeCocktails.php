@@ -169,8 +169,8 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
                     }
                 }
                 
-                //  match arbre ou score > 0
-                if ($matchArbre || $scoreTag > 0) {
+                //  match arbre
+                if ($matchArbre) {
                     if (empty($_SESSION["tagsValide"])) {
                         ?>
                         <li>
