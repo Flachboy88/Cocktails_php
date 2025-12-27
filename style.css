@@ -591,15 +591,21 @@
     padding: 15px;
 }
 
+.input-control img {
+  width: 20px;
+}
+
+
 .input-control input {
     width: 100%;
     font-size: 18px;
     padding-left: 10px;
+    outline: 0;
+    border: 0;
     color: #000;
     background-color: #f4f4f4;
     font-family: "Lato", Sans-Serif;
 }
-
 
 /* --- Filtres & Tags --- */
 .filter-section {
