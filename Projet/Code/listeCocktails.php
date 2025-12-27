@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener("keyup", function () {
         const filtre = this.value.toLowerCase();  // 'this' = searchInput
         
-        for (let item of items) {  // Boucle simplifiée
+        for (let item of items) {
             const texte = item.textContent.toLowerCase();
             item.style.display = texte.includes(filtre) ? "" : "none"; 
         }

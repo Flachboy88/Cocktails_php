@@ -14,6 +14,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    z-index: 10;
 }
 
 .logo {
@@ -38,7 +40,6 @@
     transition: 0.2s;
     padding: 0;
 }
-
 
 .user-btn:hover {
     background: #ddd;
@@ -88,7 +89,6 @@
 .user-choix_menu .logout {
     color: #d9534f;
 }
-
 
 /* --- Page d'accueil (Hero) --- */
 .hero {
