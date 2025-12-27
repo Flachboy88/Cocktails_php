@@ -85,10 +85,14 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
 
 <main>
     <h1>Cocktails disponibles</h1>
+    <br />
     <div class=input-control>
+        <label for="search">
+            <img src="../Photos/loupe.svg">
+        </label>
         <input type="text" id="search" placeholder="Rechercher un cocktail..." />
     </div>
-
+    <br />
     <!-- bouton et menu de tri -->
     <div class="filter-section">
         <button type="button" id="toggleFilters" class="btn-filter">
