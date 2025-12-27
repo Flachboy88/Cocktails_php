@@ -30,7 +30,6 @@ if (isset($_POST['applyFilters'])) {
             } elseif ($etat === 'ban') {
                 $_SESSION['tagsNonValide'][] = $tagNom;
             }
-            // 'neutral' = on ne fait rien
         }
     }
 }
