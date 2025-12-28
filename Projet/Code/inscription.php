@@ -4,22 +4,21 @@ include 'header.php';
 
 if ($_POST) {
     
-    if (!empty($_POST['login'])) {
-        $login = $_POST['login'];
-    } else {
-        $login = '';
-    }
+    $login = $_POST['login'] ?? '';
+    $mdp = $_POST['mdp'] ?? '';
+    $nom = $_POST['nom'] ?? '';
+    $prenom = $_POST['prenom'] ?? '';
+    $sexe = $_POST['sexe'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $date_naissance = $_POST['date_naissance'] ?? '';
+    $adresse = $_POST['adresse'] ?? '';
+    $code_postal = $_POST['code_postal'] ?? '';
+    $ville = $_POST['ville'] ?? '';
+    $telephone = $_POST['telephone'] ?? '';
 
-    if (!empty($_POST['mdp'])) {
-        $mdp = $_POST['mdp'];
-    } else {
-        $mdp = '';
-    }
-
-    $stmt = $pdo->prepare("INSERT INTO utilisateurs (login, motdepasse) VALUES (?, ?)");
-
+    $stmt = $pdo->prepare("INSERT INTO utilisateurs (login, motdepasse, nom, prenom, sexe, email, datenaissance, adresse, codepostal, ville, telephone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     try {
-        $stmt->execute([$login, $mdp]);
+        $stmt->execute([$login, $mdp, $nom, $prenom, $sexe, $email, $date_naissance, $adresse, $code_postal, $ville, $telephone]);
 
         $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = ?");
         $stmt->execute([$login]);

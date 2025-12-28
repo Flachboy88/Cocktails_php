@@ -15,6 +15,18 @@ $login = $user['login'];
 
 $message = "";
 
+// récup info perso
+$stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login=?");
+$stmt->execute([$login]);
+$userInfo = $stmt->fetch();
+
+// si n'existe pas BDD on déco
+if (!$userInfo) {
+    session_destroy();
+    header("Location: connexion.php");
+    exit();
+}
+
 if ($_POST) {
 
     $nom = $_POST['nom'] ?? "";
@@ -46,14 +58,15 @@ if ($_POST) {
         $login
     ]);
 
+    // recharge les infos
     $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login=?");
     $stmt->execute([$login]);
-    $_SESSION['user'] = $stmt->fetch();
+    $userInfo = $stmt->fetch();
+    $_SESSION['user'] = $userInfo;
 
     $message = "Informations mises à jour avec succès !";
 }
 
-$user = $_SESSION['user'];
 ?>
 
 <!DOCTYPE html>
@@ -70,49 +83,48 @@ $user = $_SESSION['user'];
 
         <h2 class="title">Mes informations personnelles</h2>
         <?php if ($message) echo "<p class='error' style='background:#e5ffe5;color:#2d7a2d;'>$message</p>"; ?>
-        </a>
 
         <form method="post" class="form">
 
             <h3 class="section-title">Identité</h3>
 
             <input class="input" type="text" name="nom" 
-                value="<?php echo $user['nom']; ?>" placeholder="Nom">
+                value="<?php echo htmlspecialchars($userInfo['nom']); ?>" placeholder="Nom">
 
             <input class="input" type="text" name="prenom" 
-                value="<?php echo $user['prenom']; ?>" placeholder="Prénom">
+                value="<?php echo htmlspecialchars($userInfo['prenom']); ?>" placeholder="Prénom">
 
             <label class="label">Sexe :</label>
             <select class="input" name="sexe">
                 <option value="">--</option>
-                <option value="H" <?php echo ($user['sexe'] == "H") ? "selected" : ""; ?>>Homme</option>
-                <option value="F" <?php echo ($user['sexe'] == "F") ? "selected" : ""; ?>>Femme</option>
+                <option value="H" <?php echo ($userInfo['sexe'] == "H") ? "selected" : ""; ?>>Homme</option>
+                <option value="F" <?php echo ($userInfo['sexe'] == "F") ? "selected" : ""; ?>>Femme</option>
             </select>
 
             <h3 class="section-title">Contact</h3>
 
             <input class="input" type="email" name="email" 
-                value="<?php echo $user['email']; ?>" placeholder="Email">
+                value="<?php echo htmlspecialchars($userInfo['email']); ?>" placeholder="Email">
 
             <input class="input" type="text" name="telephone" 
-                value="<?php echo $user['telephone']; ?>" placeholder="Téléphone">
+                value="<?php echo htmlspecialchars($userInfo['telephone']); ?>" placeholder="Téléphone">
 
             <h3 class="section-title">Adresse</h3>
 
             <input class="input" type="text" name="adresse" 
-                value="<?php echo $user['adresse']; ?>" placeholder="Adresse">
+                value="<?php echo htmlspecialchars($userInfo['adresse']); ?>" placeholder="Adresse">
 
             <input class="input" type="text" name="code_postal" 
-                value="<?php echo $user['codepostal']; ?>" placeholder="Code postal">
+                value="<?php echo htmlspecialchars($userInfo['codepostal']); ?>" placeholder="Code postal">
 
             <input class="input" type="text" name="ville" 
-                value="<?php echo $user['ville']; ?>" placeholder="Ville">
+                value="<?php echo htmlspecialchars($userInfo['ville']); ?>" placeholder="Ville">
 
             <h3 class="section-title">Autre</h3>
 
             <label class="label">Date de naissance :</label>
             <input class="input" type="date" name="date_naissance" 
-                value="<?php echo $user['datenaissance']; ?>">
+                value="<?php echo htmlspecialchars($userInfo['datenaissance']); ?>">
 
             <button type="submit" class="btn">Enregistrer les modifications</button>
             <a href="pagePrincipale.php" class="btn-return"> Retour aux recettes</a>
