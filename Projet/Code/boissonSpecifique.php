@@ -15,33 +15,33 @@ if (isset($_GET['boissonSpecifique'])) {
     $_SESSION['boissonSpecifique'] = $_GET['boissonSpecifique'];
 }
 
-//initialiser les favoris en session si nécessaire
+// initialiser les favoris en session si nécessaire
 if (!isset($_SESSION['favoris'])) {
     $_SESSION['favoris'] = [];
 }
 
-//ajouter/retirer des favoris
+// ajouter/retirer des favoris
 if (isset($_GET['action']) && $_GET['action'] === 'toggle_favori') {
     $recette_id = $_SESSION['boissonSpecifique'];
     
     if (in_array($recette_id, $_SESSION['favoris'])) {
-        //retirer des favoris
+        // retirer des favoris
         $_SESSION['favoris'] = array_diff($_SESSION['favoris'], [$recette_id]);
     } else {
-        //ajouter aux favoris
+        // ajouter aux favoris
         $_SESSION['favoris'][] = $recette_id;
     }
     
-    //si connecté, synchroniser avec la BDD
+    // si connecté, synchroniser avec la bdd
     if (isset($_SESSION['user'])) {
         $user_id = $_SESSION['user']['id'];
         
         if (in_array($recette_id, $_SESSION['favoris'])) {
-            // ajouter en BDD
+            // ajouter en bdd
             $stmt = $pdo->prepare("INSERT IGNORE INTO recettes_favorites (utilisateur_id, recette_id) VALUES (?, ?)");
             $stmt->execute([$user_id, $recette_id]);
         } else {
-            // retirer de la BDD
+            // retirer de la bdd
             $stmt = $pdo->prepare("DELETE FROM recettes_favorites WHERE utilisateur_id = ? AND recette_id = ?");
             $stmt->execute([$user_id, $recette_id]);
         }
@@ -55,9 +55,30 @@ $index = $_SESSION['boissonSpecifique'];
 $boisson = $Recettes[$index];
 $isFavori = in_array($index, $_SESSION['favoris']);
 
-$nomImageFichier = str_replace(' ', '_', $boisson['titre']) . '.jpg';
-$cheminPhysique = __DIR__ . '/../Photos/' . $nomImageFichier;
-$cheminURL = '../Photos/' . $nomImageFichier;
+// fonction pour normaliser le nom de fichier
+function normaliserNomFichier($nom) {
+    // remplacer les caractères accentués
+    $nom = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nom);
+    // remplacer les espaces par des underscores
+    $nom = str_replace(' ', '_', $nom);
+    // supprimer les apostrophes et autres caractères spéciaux
+    $nom = preg_replace("/[^a-zA-Z0-9_-]/", '', $nom);
+    return $nom;
+}
+
+$nomImageBase = normaliserNomFichier($boisson['titre']);
+
+// chercher d'abord avec .jpg, puis .png si introuvable
+$extensions = ['jpg', 'png', 'jpeg'];
+$imageAffichee = '../Photos/mystere.jpg'; // image par défaut
+
+foreach ($extensions as $ext) {
+    $cheminPhysique = __DIR__ . '/../Photos/' . $nomImageBase . '.' . $ext;
+    if (file_exists($cheminPhysique)) {
+        $imageAffichee = '../Photos/' . $nomImageBase . '.' . $ext;
+        break;
+    }
+}
 
 ?>
 
@@ -83,9 +104,6 @@ $cheminURL = '../Photos/' . $nomImageFichier;
 
     <div class="boisson-card">
         <div class="boisson-content">
-        <?php
-        $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : '../Photos/mystere.jpg';
-        ?>
         <img src="<?= htmlspecialchars($imageAffichee) ?>"
             alt="<?= htmlspecialchars($boisson['titre']) ?>"
             class="boisson-image">
