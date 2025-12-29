@@ -63,23 +63,35 @@ function normaliserNomFichier($nom) {
     $nom = str_replace(' ', '_', $nom);
     // supprimer les apostrophes et autres caractères spéciaux
     $nom = preg_replace("/[^a-zA-Z0-9_-]/", '', $nom);
-    return $nom;
+    // convertir en minuscules pour la recherche
+    return strtolower($nom);
 }
 
 $nomImageBase = normaliserNomFichier($boisson['titre']);
 
-// chercher d'abord avec .jpg, puis .png si introuvable
 $extensions = ['jpg', 'png', 'jpeg'];
-$imageAffichee = '../Photos/mystere.jpg'; // image par défaut
+$imageAffichee = '../Photos/mystere.jpg'; // image par déf
 
 foreach ($extensions as $ext) {
+    // nom normalisé en minuscules
     $cheminPhysique = __DIR__ . '/../Photos/' . $nomImageBase . '.' . $ext;
     if (file_exists($cheminPhysique)) {
         $imageAffichee = '../Photos/' . $nomImageBase . '.' . $ext;
         break;
     }
+    
+    // cas chiant sur linux ( machine en ligne ) pour éviter la casse 
+    $dossierPhotos = __DIR__ . '/../Photos/';
+    if (is_dir($dossierPhotos)) {
+        $fichiers = scandir($dossierPhotos);
+        foreach ($fichiers as $fichier) {
+            if (strtolower($fichier) === $nomImageBase . '.' . $ext) {
+                $imageAffichee = '../Photos/' . $fichier;
+                break 2; // sortir de la boucle
+            }
+        }
+    }
 }
-
 ?>
 
 <!DOCTYPE html>
