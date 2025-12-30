@@ -14,8 +14,6 @@ if (!isset($_SESSION['user'])) {
 $user = $_SESSION['user'];
 $login = $user['login'];
 
-$message = "";
-
 // récup info perso
 $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login=?");
 $stmt->execute([$login]);
@@ -41,34 +39,68 @@ if ($_POST) {
     $ville = $_POST['ville'] ?? ""; // récupération de la ville, si non présent, on met un espace
     $telephone = $_POST['telephone'] ?? ""; // récupération du téléphone, si non présent, on met un espace
 
-    // on fait la requête de mise à jour
-    $stmt = $pdo->prepare("
-        UPDATE utilisateurs 
-        SET nom=?, prenom=?, sexe=?, email=?, datenaissance=?, adresse=?, codepostal=?, ville=?, telephone=?
-        WHERE login=?
-    ");
+    // tableau pour stocker les erreurs
+    $erreurs = [];
 
-    // on exécute la requête avec les valeurs modifiées
-    $stmt->execute([
-        $nom,
-        $prenom,
-        $sexe,
-        $email,
-        $date_naissance,
-        $adresse,
-        $code_postal,
-        $ville,
-        $telephone,
-        $login
-    ]);
+    // vérification nom 
+    if (!empty($nom) && !preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/u", $nom)) {
+        $erreurs[] = "Le nom ne doit contenir que des lettres.";
+    }
 
-    // recharge les infos
-    $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login=?");
-    $stmt->execute([$login]);
-    $userInfo = $stmt->fetch();
-    $_SESSION['user'] = $userInfo;
+    // vérification prénom
+    if (!empty($prenom) && !preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/u", $prenom)) {
+        $erreurs[] = "Le prénom ne doit contenir que des lettres.";
+    }
 
-    $message = "Informations mises à jour avec succès !";
+    // vérification email
+    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $erreurs[] = "L'adresse email n'est pas valide.";
+    }
+
+    // vérification ville
+    if (!empty($ville) && !preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/u", $ville)) {
+        $erreurs[] = "La ville ne doit contenir que des lettres.";
+    }
+
+    // vérification téléphone
+    if (!empty($telephone) && !preg_match("/^0[1-9][0-9]{8}$/", $telephone)) {
+        $erreurs[] = "Le téléphone doit être au format français (10 chiffres commençant par 0).";
+    }
+
+    // si pas d'erreurs, on met à jour
+    if (empty($erreurs)) {
+        // on fait la requête de mise à jour
+        $stmt = $pdo->prepare("
+            UPDATE utilisateurs 
+            SET nom=?, prenom=?, sexe=?, email=?, datenaissance=?, adresse=?, codepostal=?, ville=?, telephone=?
+            WHERE login=?
+        ");
+
+        // on exécute la requête avec les valeurs modifiées
+        $stmt->execute([
+            $nom,
+            $prenom,
+            $sexe,
+            $email,
+            $date_naissance,
+            $adresse,
+            $code_postal,
+            $ville,
+            $telephone,
+            $login
+        ]);
+
+        // recharge les infos
+        $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login=?");
+        $stmt->execute([$login]);
+        $userInfo = $stmt->fetch();
+        $_SESSION['user'] = $userInfo;
+
+        $message = "Informations mises à jour avec succès !";
+    } else {
+        // si des erreurs existent, on les affiche
+        $message = implode("<br>", $erreurs);
+    }
 }
 
 ?>
@@ -86,7 +118,15 @@ if ($_POST) {
     <div class="form-card">
 
         <h2 class="title">Mes informations personnelles</h2>
-        <?php if ($message) echo "<p class='error' style='background:#e5ffe5;color:#2d7a2d;'>$message</p>"; ?> <!-- affichage du message d'erreur si présent -->
+        <?php 
+        if (isset($message)) {
+            // si le message contient "succès", affichage en vert, sinon en rouge
+            $style = (strpos($message, 'succès') !== false) 
+                ? "background:#e5ffe5;color:#2d7a2d;" 
+                : "background:#ffe5e5;color:#d32f2f;";
+            echo "<div class='error' style='$style'>$message</div>";
+        }
+        ?>
 
         <!-- formulaire de mise à jour des informations personnelles -->
         <form method="post" class="form">
