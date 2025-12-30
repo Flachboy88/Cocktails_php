@@ -132,7 +132,7 @@
                 </div>
                 
                 <div class="filter-actions">
-                    <button type="submit" name="applyFilters" class="btn-apply">✓ Appliquer</button>
+                    <button type="submit" name="applyFilters" class="btn-apply">V Appliquer</button>
                     <button type="submit" name="resetFilters" class="btn-reset">↺ Réinitialiser</button>
                 </div>
             </form>
