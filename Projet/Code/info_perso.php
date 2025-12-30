@@ -5,6 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include 'header.php';
 
+// si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
 if (!isset($_SESSION['user'])) {
     header("Location: connexion.php");
     exit();
@@ -27,24 +28,27 @@ if (!$userInfo) {
     exit();
 }
 
+//traitement du formulaire
 if ($_POST) {
 
-    $nom = $_POST['nom'] ?? "";
-    $prenom = $_POST['prenom'] ?? "";
-    $sexe = $_POST['sexe'] ?? "";
-    $email = $_POST['email'] ?? "";
-    $date_naissance = $_POST['date_naissance'] ?? "";
-    $adresse = $_POST['adresse'] ?? "";
-    $code_postal = $_POST['code_postal'] ?? "";
-    $ville = $_POST['ville'] ?? "";
-    $telephone = $_POST['telephone'] ?? "";
+    $nom = $_POST['nom'] ?? ""; // récupération du nom, si non présent, on met un espace
+    $prenom = $_POST['prenom'] ?? ""; // récupération du prénom, si non présent, on met un espace
+    $sexe = $_POST['sexe'] ?? ""; // récupération du sexe, si non présent, on met un espace
+    $email = $_POST['email'] ?? ""; // récupération de l'email, si non présent, on met un espace
+    $date_naissance = $_POST['date_naissance'] ?? ""; // récupération de la date de naissance, si non présent, on met un espace
+    $adresse = $_POST['adresse'] ?? ""; // récupération de l'adresse, si non présent, on met un espace
+    $code_postal = $_POST['code_postal'] ?? ""; // récupération du code postal, si non présent, on met un espace
+    $ville = $_POST['ville'] ?? ""; // récupération de la ville, si non présent, on met un espace
+    $telephone = $_POST['telephone'] ?? ""; // récupération du téléphone, si non présent, on met un espace
 
+    // on fait la requête de mise à jour
     $stmt = $pdo->prepare("
         UPDATE utilisateurs 
         SET nom=?, prenom=?, sexe=?, email=?, datenaissance=?, adresse=?, codepostal=?, ville=?, telephone=?
         WHERE login=?
     ");
 
+    // on exécute la requête avec les valeurs modifiées
     $stmt->execute([
         $nom,
         $prenom,
@@ -82,8 +86,9 @@ if ($_POST) {
     <div class="form-card">
 
         <h2 class="title">Mes informations personnelles</h2>
-        <?php if ($message) echo "<p class='error' style='background:#e5ffe5;color:#2d7a2d;'>$message</p>"; ?>
+        <?php if ($message) echo "<p class='error' style='background:#e5ffe5;color:#2d7a2d;'>$message</p>"; ?> <!-- affichage du message d'erreur si présent -->
 
+        <!-- formulaire de mise à jour des informations personnelles -->
         <form method="post" class="form">
 
             <h3 class="section-title">Identité</h3>

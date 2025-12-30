@@ -2,16 +2,16 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php'; 
 require_once __DIR__ . '/Donnees.inc.php';
 
-if (!isset($_SESSION['Aliment'])){
+if (!isset($_SESSION['Aliment'])){ // initialisation
     $_SESSION['Aliment'] = 'Aliment';
 }
-if (!isset($_SESSION['ArbreDeRecherche'])){
+if (!isset($_SESSION['ArbreDeRecherche'])){ // initialisation
     $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
 }
-if (isset($_GET['boissonSpecifique'])) {
+if (isset($_GET['boissonSpecifique'])) { 
     $_SESSION['boissonSpecifique'] = $_GET['boissonSpecifique'];
 }
 
@@ -63,13 +63,13 @@ function normaliserNomFichier($nom) {
     $nom = str_replace(' ', '_', $nom);
     // supprimer les apostrophes et autres caractères spéciaux
     $nom = preg_replace("/[^a-zA-Z0-9_-]/", '', $nom);
-    // convertir en minuscules pour la recherche
+    // convertir en minuscules
     return strtolower($nom);
 }
 
 $nomImageBase = normaliserNomFichier($boisson['titre']);
 
-$extensions = ['jpg', 'png', 'jpeg'];
+$extensions = ['jpg', 'png', 'jpeg']; // on mets plusieurs extension au cas ou on rajoute plus tard des images en png ou autre
 $imageAffichee = '../Photos/mystere.jpg'; // image par déf
 
 foreach ($extensions as $ext) {
@@ -108,6 +108,7 @@ foreach ($extensions as $ext) {
         <div class="boisson-actions">
             <a href="pagePrincipale.php" class="btn-action btn-retour-action">← Retour</a>
             
+            <!-- bouton pour ajouter/retirer des favoris -->
             <a href="boissonSpecifique.php?action=toggle_favori" class="btn-action btn-favori <?= $isFavori ? 'actif' : '' ?>">
                 <?= $isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris' ?>
             </a>
@@ -121,12 +122,15 @@ foreach ($extensions as $ext) {
             class="boisson-image">
         
         <div class="boisson-content">
+            <!-- titre de la boisson -->
             <h1 class="boisson-titre"><?= htmlspecialchars($boisson['titre']) ?></h1>
             
+            <!-- section pour afficher les ingrédients -->
             <div class="boisson-section">
                 <h2 class="boisson-section-title">Ingrédients</h2>
                 <ul class="ingredients-list">
                     <?php 
+                    // on sépare les ingrédients par le caractère "|"
                     $ingredients = explode('|', $boisson['ingredients']);
                     foreach ($ingredients as $ingredient): ?>
                         <li><?= htmlspecialchars(trim($ingredient)) ?></li>
@@ -137,7 +141,7 @@ foreach ($extensions as $ext) {
             <div class="boisson-section">
                 <h2 class="boisson-section-title">Préparation</h2>
                 <div class="preparation-text">
-                    <?= nl2br(htmlspecialchars($boisson['preparation'])) ?>
+                    <?= nl2br(htmlspecialchars($boisson['preparation'])) ?> <!-- on ajoute un saut de ligne pour que le texte soit plus lisible -->
                 </div>
             </div>
         </div>

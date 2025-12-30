@@ -1,85 +1,85 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE) { //initialisation
-    session_start();
-}
+    if (session_status() === PHP_SESSION_NONE) { //initialisation
+        session_start();
+    }
 
-include 'Donnees.inc.php'; 
+    include 'Donnees.inc.php'; 
 
 
-if (!isset($_SESSION['Aliment'])){
-    $_SESSION['Aliment'] = 'Aliment';
-}
-if (!isset($_SESSION['ArbreDeRecherche'])) {
-    $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
-}
-if (!isset($_SESSION['boissonSpecifique'])) {
-    $_SESSION['boissonSpecifique'] = 0;
-}
+    if (!isset($_SESSION['Aliment'])){
+        $_SESSION['Aliment'] = 'Aliment';
+    }
+    if (!isset($_SESSION['ArbreDeRecherche'])) {
+        $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
+    }
+    if (!isset($_SESSION['boissonSpecifique'])) {
+        $_SESSION['boissonSpecifique'] = 0;
+    }
 
-// filtres
-if (isset($_POST['applyFilters'])) {
-    $_SESSION['tagsValide'] = [];
-    $_SESSION['tagsNonValide'] = [];
-    
-    if (isset($_POST['tags'])) {
-        foreach ($_POST['tags'] as $tagPost => $etat) {
-            $tagNom = str_replace('_', ' ', $tagPost);
-            
-            if ($etat === 'onVeut') {
-                $_SESSION['tagsValide'][] = $tagNom;
-            } elseif ($etat === 'ban') {
-                $_SESSION['tagsNonValide'][] = $tagNom;
+    // filtres
+    if (isset($_POST['applyFilters'])) {
+        $_SESSION['tagsValide'] = [];
+        $_SESSION['tagsNonValide'] = [];
+        
+        if (isset($_POST['tags'])) {
+            foreach ($_POST['tags'] as $tagPost => $etat) {
+                $tagNom = str_replace('_', ' ', $tagPost);
+                
+                if ($etat === 'onVeut') {
+                    $_SESSION['tagsValide'][] = $tagNom;
+                } elseif ($etat === 'ban') {
+                    $_SESSION['tagsNonValide'][] = $tagNom;
+                }
             }
         }
     }
-}
 
-if (isset($_POST['resetFilters'])) {
-    $_SESSION['tagsNonValide'] = [];
-    $_SESSION['tagsValide'] = [];
-}
-
-$liste_feuille = [];
-function cherche_arbre($noeud,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
-    global $Hierarchie;
-    if (!isset($Hierarchie[$noeud]['sous-categorie'])){ // si le noeud est une feuille on l'ajoute la la liste de feuille
-        $liste_feuille[] = $noeud; 
+    if (isset($_POST['resetFilters'])) {
+        $_SESSION['tagsNonValide'] = [];
+        $_SESSION['tagsValide'] = [];
     }
-    else{
-        foreach ($Hierarchie[$noeud]['sous-categorie'] as $key){ // sinon on applique la fonction a toutes les sous-catégories
-            cherche_arbre($key,$liste_feuille);
+
+    $liste_feuille = [];
+    function cherche_arbre($noeud,&$liste_feuille){ // on cherche a trouver toutes les feuilles depuis un certain noeud
+        global $Hierarchie;
+        if (!isset($Hierarchie[$noeud]['sous-categorie'])){ // si le noeud est une feuille on l'ajoute la la liste de feuille
+            $liste_feuille[] = $noeud; 
         }
-    }
-
-}
-
-function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles avec les ingrédient de la boisson. Si il y en a au moins une en commun. alors on revoie true (ce qui permetera d'afficher la boisson)
-    foreach($tab1 as $tab11){
-        foreach($tab2 as $tab22){
-            if($tab11 == $tab22){
-                return true;
+        else{
+            foreach ($Hierarchie[$noeud]['sous-categorie'] as $key){ // sinon on applique la fonction a toutes les sous-catégories
+                cherche_arbre($key,$liste_feuille);
             }
         }
-    }
-    return false;
-}
 
-$tab_tag = [];
-function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier les différantes recette en fonction du nombres de tags valides
-    // on utilise un double tableau pour stocker les boissons en foction du nombre de tags. la première entrée est le nombre de tag, la deuxième le nom des boissons
-    $i = 0;
-    foreach ($boisson['index'] as $index){
-        if (in_array($index, $_SESSION['tagsValide'])) {
-            $i++;
+    }
+
+    function cherche_comparaison($tab1,$tab2){ // on compare la liste des feuilles avec les ingrédient de la boisson. Si il y en a au moins une en commun. alors on revoie true (ce qui permetera d'afficher la boisson)
+        foreach($tab1 as $tab11){
+            foreach($tab2 as $tab22){
+                if($tab11 == $tab22){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    $tab_tag = [];
+    function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier les différantes recette en fonction du nombres de tags valides
+        // on utilise un double tableau pour stocker les boissons en foction du nombre de tags. la première entrée est le nombre de tag, la deuxième le nom des boissons
+        $i = 0;
+        foreach ($boisson['index'] as $index){
+            if (in_array($index, $_SESSION['tagsValide'])) {
+                $i++;
+            }
+
+        }
+
+        if($i >= 1){
+            $tab_tag[$i][] = $nomboisson;
         }
 
     }
-
-    if($i >= 1){
-        $tab_tag[$i][] = $nomboisson;
-    }
-
-}
 ?>
 
 <main>
@@ -216,46 +216,49 @@ function cherche_nb_tags($nomboisson,$boisson,&$tab_tag){ // on cherche a trier 
     </ul>
 </main>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    
-    //  filtrer les cocktails en temps réel
-    const searchInput = document.getElementById("search");
-    const items = document.getElementById("listeC").getElementsByTagName("li");
-    
-    searchInput.addEventListener("keyup", function () {
-        const filtre = this.value.toLowerCase();  // 'this' = searchInput
+
+    // on charge le script uniquement si le document est chargé (tuto youtube)
+    document.addEventListener("DOMContentLoaded", function () {
         
-        for (let item of items) {
-            const texte = item.textContent.toLowerCase();
-            item.style.display = texte.includes(filtre) ? "" : "none"; 
-        }
-    });
-
-    // afficher/cacher le menu
-    document.getElementById("toggleFilters").addEventListener("click", function() {
-        const menu = document.getElementById("filterMenu");
-        menu.style.display = menu.style.display === "none" ? "block" : "none";
-    });
-
-    // Gestion des boutons tristate
-    document.querySelectorAll('.tristate-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.parentElement.querySelector('.tristate-value');
-            const currentState = input.value;
+        //  filtrer les cocktails en temps réel
+        const searchInput = document.getElementById("search");
+        const items = document.getElementById("listeC").getElementsByTagName("li");
+        
+        // on filtre les éléments du menu en fonction du texte saisi dans la barre de recherche
+        searchInput.addEventListener("keyup", function () {
+            const filtre = this.value.toLowerCase();  // 'this' = searchInput
             
-            //neutral -> onVeut -> ban -> neutral
-            let newState;
-            if (currentState === 'neutral') {
-                newState = 'onVeut';
-            } else if (currentState === 'onVeut') {
-                newState = 'ban';
-            } else {
-                newState = 'neutral';
+            for (let item of items) {
+                const texte = item.textContent.toLowerCase();
+                item.style.display = texte.includes(filtre) ? "" : "none"; 
             }
-            
-            input.value = newState;
-            this.className = 'tristate-btn state-' + newState;
+        });
+
+        // afficher/cacher le menu
+        document.getElementById("toggleFilters").addEventListener("click", function() {
+            const menu = document.getElementById("filterMenu");
+            menu.style.display = menu.style.display === "none" ? "block" : "none";
+        });
+
+        // gestion des boutons tristate ( onVeut, ban, neutral )
+        document.querySelectorAll('.tristate-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.tristate-value');
+                const currentState = input.value;
+                
+                //neutral -> onVeut -> ban -> neutral ca fait un cycle si on clique plusieurs fois sur le même bouton
+                let newState;
+                if (currentState === 'neutral') {
+                    newState = 'onVeut';
+                } else if (currentState === 'onVeut') {
+                    newState = 'ban';
+                } else {
+                    newState = 'neutral';
+                }
+                
+                input.value = newState;
+                this.className = 'tristate-btn state-' + newState;
+            });
         });
     });
-});
 </script>

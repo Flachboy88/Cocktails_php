@@ -5,8 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include 'header.php';
 include 'Donnees.inc.php';
-$rootURL = $GLOBALS['projectRoot'];
+$rootURL = $GLOBALS['projectRoot']; // on récupère le chemin du projet ( utile pour les photos )
 
+// si l'utilisateur n'est pas connecté, on initialise ses favoris à vide
 if (!isset($_SESSION['favoris'])) {
     $_SESSION['favoris'] = [];
 }
@@ -35,7 +36,7 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
 
     <h1 class="favoris-title">Mes Favoris</h1>
 
-    <?php if (empty($_SESSION['favoris'])): ?>
+    <?php if (empty($_SESSION['favoris'])): ?> <!-- si aucun favori, on affiche un message -->
 
         <div class="favoris-empty">
             <p>Vous n'avez pas encore de favoris.</p>
@@ -47,32 +48,36 @@ if (isset($_SESSION['user']) && empty($_SESSION['favoris'])) {
     <?php else: ?>
 
         <ul class="favoris-grid">
+            <!-- affichage de chaque favori -->
             <?php foreach ($_SESSION['favoris'] as $recette_id): ?>
 
                 <?php if (isset($Recettes[$recette_id])): 
                     $recette = $Recettes[$recette_id];
                     $nomFichier = str_replace(' ', '_', $recette['titre']) . '.jpg';
                     
-                    // 1. Chemin pour que le PHP vérifie l'existence du fichier sur le disque
-                    $cheminPhysique = __DIR__ . '/../Photos/' . $nomFichier;
+                    // chemin pour que le php vérifie l'existence du fichier sur le disque
+                    $cheminPhysique = __DIR__ . '/../Photos/' . $nomFichier; // obligé de faire ca pour que ca marche sur la machine en ligne
                     
-                    // 2. Chemin pour que le NAVIGATEUR affiche l'image (URL)
+                    // chemin pour que le navigateur affiche l'image
                     $cheminURL = $rootURL . '/Projet/Photos/' . $nomFichier;
-                    $imageMystere = $rootURL . '/Projet/Photos/mystere.jpg';
+                    $imageMystere = $rootURL . '/Projet/Photos/mystere.jpg'; // image par défaut
                 ?>
 
-                <li>
+                <li> 
+
                     <a href="boissonSpecifique.php?boissonSpecifique=<?= urlencode($recette_id) ?>" class="favoris-card">
 
                         <?php
-                        // Vérification physique de l'image
+                        // vérification physique de l'image
                         $imageAffichee = file_exists($cheminPhysique) ? $cheminURL : $imageMystere;
                         ?>
                         
+                        <!-- affichage de l'image -->
                         <img src="<?= htmlspecialchars($imageAffichee) ?>"
                              alt="<?= htmlspecialchars($recette['titre']) ?>"
                              class="favoris-card-img">
                     
+                        <!-- affichage du titre de la boisson -->
                         <div class="favoris-card-content">
                             <h3 class="favoris-card-title">
                                 <?= htmlspecialchars($recette['titre']) ?>

@@ -4,22 +4,22 @@ include 'header.php';
 
 if ($_POST) {
     
-    $login = $_POST['login'] ?? '';
-    $mdp = $_POST['mdp'] ?? '';
-    $nom = $_POST['nom'] ?? '';
-    $prenom = $_POST['prenom'] ?? '';
-    $sexe = $_POST['sexe'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $date_naissance = $_POST['date_naissance'] ?? '';
-    $adresse = $_POST['adresse'] ?? '';
-    $code_postal = $_POST['code_postal'] ?? '';
-    $ville = $_POST['ville'] ?? '';
-    $telephone = $_POST['telephone'] ?? '';
+    $login = $_POST['login'] ?? ''; // récupération du login, si non présent, on met un espace
+    $mdp = $_POST['mdp'] ?? ''; // récupération du mot de passe, si non présent, on met un espace
+    $nom = $_POST['nom'] ?? ''; // récupération du nom, si non présent, on met un espace
+    $prenom = $_POST['prenom'] ?? ''; // récupération du prénom, si non présent, on met un espace
+    $sexe = $_POST['sexe'] ?? ''; // récupération du sexe, si non présent, on met un espace
+    $email = $_POST['email'] ?? ''; // récupération de l'email, si non présent, on met un espace
+    $date_naissance = $_POST['date_naissance'] ?? ''; // récupération de la date de naissance, si non présent, on met un espace
+    $adresse = $_POST['adresse'] ?? ''; // récupération de l'adresse, si non présent, on met un espace
+    $code_postal = $_POST['code_postal'] ?? ''; // récupération du code postal, si non présent, on met un espace
+    $ville = $_POST['ville'] ?? ''; // récupération de la ville, si non présent, on met un espace    
+    $telephone = $_POST['telephone'] ?? ''; // récupération du téléphone, si non présent, on met un espace
 
     // tableau pour stocker les erreurs
     $erreurs = [];
 
-    // vérification login et mot de passe obligatoires
+    //vérification en double ( front et back ) des champs obligatoires
     if (empty($login)) {
         $erreurs[] = "Le login est obligatoire.";
     }
@@ -55,10 +55,10 @@ if ($_POST) {
     // si pas d'erreurs, on insère
     if (empty($erreurs)) {
         $stmt = $pdo->prepare("INSERT INTO utilisateurs (login, motdepasse, nom, prenom, sexe, email, datenaissance, adresse, codepostal, ville, telephone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        try {
-            $stmt->execute([$login, $mdp, $nom, $prenom, $sexe, $email, $date_naissance, $adresse, $code_postal, $ville, $telephone]);
+        try { // on essaye de faire la requête
+            $stmt->execute([$login, $mdp, $nom, $prenom, $sexe, $email, $date_naissance, $adresse, $code_postal, $ville, $telephone]); 
 
-            $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = ?");
+            $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = ?"); // on récupère les infos de l'utilisateur
             $stmt->execute([$login]);
             $user = $stmt->fetch();
 
@@ -95,11 +95,12 @@ if ($_POST) {
         <h2 class="title">Créer un compte</h2>
 
         <?php 
-        if (isset($message)) {
-            echo "<div class='error'>" . $message . "</div>";
+        if (isset($message)) { // si un message d'erreur est présent
+            echo "<div class='error'>" . $message . "</div>"; // on affiche le message
         }
         ?>
 
+        <!-- formulaire de création d'un compte -->
         <form method="post" class="form">
 
             <h3 class="section-title">Identifiants</h3>

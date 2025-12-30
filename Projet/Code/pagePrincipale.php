@@ -1,22 +1,23 @@
 <?php
-session_start();
-include __DIR__ . '/header.php'; // inclus header depuis le même dossier ou adapté
+    session_start();
+    include __DIR__ . '/header.php'; // inclus header depuis le même dossier ou adapté
 
-if (!isset($_SESSION['Aliment'])){
-    $_SESSION['Aliment'] = 'Aliment';
-}
-if (!isset($_SESSION['ArbreDeRecherche'])){
-    $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
-}
-if (!isset($_SESSION['boissonSpecifique'])){
-    $_SESSION['boissonSpecifique'] = 0;
-}
-if (!isset($_SESSION['tagsValide'])){
-    $_SESSION['tagsValide'] = [];
-}
-if (!isset($_SESSION['tagsNonValide'])){
-    $_SESSION['tagsNonValide'] = [];
-}
+    // initialisation des variables
+    if (!isset($_SESSION['Aliment'])){
+        $_SESSION['Aliment'] = 'Aliment';
+    }
+    if (!isset($_SESSION['ArbreDeRecherche'])){
+        $_SESSION['ArbreDeRecherche'][0] = 'Aliment';
+    }
+    if (!isset($_SESSION['boissonSpecifique'])){
+        $_SESSION['boissonSpecifique'] = 0;
+    }
+    if (!isset($_SESSION['tagsValide'])){
+        $_SESSION['tagsValide'] = [];
+    }
+    if (!isset($_SESSION['tagsNonValide'])){
+        $_SESSION['tagsNonValide'] = [];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ if (!isset($_SESSION['tagsNonValide'])){
 <head>
     <meta charset="UTF-8">
     <title>MyCocktails – Page Principale</title>
-    <!-- Style depuis la racine du projet -->
+    <!-- style depuis la racine du projet -->
     <link rel="stylesheet" href="<?= $projectRoot ?>/style.css">
 </head>
 <body>
@@ -32,8 +33,8 @@ if (!isset($_SESSION['tagsNonValide'])){
 <main class="container">
     <h1 class="page-title">Bienvenue sur MyCocktails</h1>
 
-    <div class="content-wrapper">
-        <aside class="sidebar">
+    <div class="content-wrapper"> <!-- on affiche le contenu dans la partie centrale -->
+        <aside class="sidebar"> <!-- on affiche le menu dans la partie latérale -->
             <?php include 'rubrique.php'; ?>
         </aside>
         
